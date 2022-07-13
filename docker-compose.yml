@@ -1,0 +1,46 @@
+version: '3.9'
+services:
+
+  mongodb:
+    restart: always
+    image: mongo:5.0
+    ports:
+      - "27017:27017" 
+    volumes:
+      - './database:/data/db'
+
+
+  api:
+    image: node:12-alpine
+
+    volumes:
+      - './api:/www/api'
+    restart: always
+    ports:
+      - "8080:8000"
+    depends_on:
+      - mongodb
+
+    #command: sh -c ""cd /www/api && npm start"  
+
+
+
+  
+  # nginx:
+  #   restart: always
+  #   build:
+  #       context: ./nginx
+  #   ports:
+  #       - "80:80"
+  #       - "443:443"
+
+  # react:
+  #   build:
+  #       context: ./app
+  #   ports:
+  #       - "3000:3000"
+  #   networks:
+  #     - frontend
+
+
+
