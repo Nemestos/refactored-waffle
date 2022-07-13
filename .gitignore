@@ -106,8 +106,12 @@ dist
 
 .idea/
 api/yarn.lock
+
 #SSL Certificate
 cert.pem
 chain.pem
 fullchain.pem
 privkey.pem
+
+database
+.DS_Store
