@@ -1,0 +1,53 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": ["standard", "plugin:jsx-a11y/recommended", "prettier"],
+  "plugins": ["jsx-a11y", "prettier", "@typescript-eslint"],
+  "env": {
+    "browser": true,
+    "jest": true
+  },
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "16.10.1"
+    }
+  },
+  "rules": {
+    "import/no-extraneous-dependencies": [
+      1,
+      {
+        "devDependencies": true,
+        "optionalDependencies": false,
+        "peerDependencies": true
+      }
+    ],
+    "no-use-before-define": 1,
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/camelcase": 0,
+    "no-shadow": 0,
+    "no-case-declarations": 0,
+    "no-console": 1,
+    "react/forbid-foreign-prop-types": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "semi": false,
+        "singleQuote": true,
+        "endOfLine": "auto"
+      }
+    ],
+    "no-var": "error",
+    "@typescript-eslint/no-unused-vars": "error",
+    "no-undef": "off",
+    "no-unused-vars": "off",
+    "import/named": "off",
+    "import/no-unresolved": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/click-events-have-key-events": "off"
+  }
+}

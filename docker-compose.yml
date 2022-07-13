@@ -12,7 +12,6 @@ services:
 
   api:
     image: node:12-alpine
-
     volumes:
       - './api:/www/api'
     restart: always
@@ -21,7 +20,7 @@ services:
     depends_on:
       - mongodb
 
-    #command: sh -c ""cd /www/api && npm start"  
+    command: sh -c "cd /www/api && yarn install && yarn start"  
 
 
 
