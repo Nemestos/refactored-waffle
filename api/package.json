@@ -5,9 +5,9 @@
   "main": "./dist/index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --watch src -e js,ts,json --exec \"ts-node src/index.ts\"",
+    "start:dev": "nodemon --watch src -e js,ts,json --exec \"ts-node src/index.ts\"",
+    "start:prod": "node dist/index.cjs",
     "build": "tsup src/index.ts --clean",
-    "start": "node dist/index.cjs",
     "lint": "eslint . --ext .js,.ts",
     "lint-fix": "npm run lint -- --fix",
     "test": "jest --watchAll --collectCoverage"

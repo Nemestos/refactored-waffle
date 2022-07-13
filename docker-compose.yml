@@ -8,19 +8,26 @@ services:
       - "27017:27017" 
     volumes:
       - './database:/data/db'
+    networks:
+      - db
 
 
   api:
-    image: node:12-alpine
+    build: 
+      dockerfile: services/api/Dockerfile.dev
+      context: .
     volumes:
-      - './api:/www/api'
+      - ./api:/usr/src/app
+      - /usr/src/app/node_modules
     restart: always
     ports:
       - "8080:8000"
     depends_on:
       - mongodb
-
-    command: sh -c "cd /www/api && yarn install && yarn start"  
+    command: yarn start:dev
+    networks:
+      - api
+      - db
 
 
 
@@ -43,3 +50,6 @@ services:
 
 
 
+networks:
+  api:
+  db:
