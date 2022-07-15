@@ -1,6 +1,6 @@
 version: '3.9'
-services:
 
+services:
   mongodb:
     restart: always
     image: mongo:5.0
@@ -8,22 +8,39 @@ services:
       - "27017:27017" 
     volumes:
       - './database:/data/db'
-
+    networks:
+      - db
 
   api:
-    image: node:12-alpine
+    build: 
+      dockerfile: services/api/Dockerfile.dev
+      context: .
     volumes:
-      - './api:/www/api'
+      - ./api:/usr/src/app
+      - /usr/src/app/node_modules
     restart: always
     ports:
       - "8080:8000"
     depends_on:
       - mongodb
+    command: yarn start:dev
+    networks:
+      - frontend
+      - db
 
-    command: sh -c "cd /www/api && yarn install && yarn start"  
-
-
-
+  next:
+    restart: always
+    depends_on: 
+      - api
+    build:
+        context: ./frontEnd
+    volumes:
+      - ./frontEnd:/usr/src/app
+      - /usr/src/app/node_modules 
+    ports:
+        - "3000:3000"
+    networks:
+      - frontend
   
   # nginx:
   #   restart: always
@@ -33,13 +50,6 @@ services:
   #       - "80:80"
   #       - "443:443"
 
-  # react:
-  #   build:
-  #       context: ./app
-  #   ports:
-  #       - "3000:3000"
-  #   networks:
-  #     - frontend
-
-
-
+networks:
+  frontend:
+  db:
