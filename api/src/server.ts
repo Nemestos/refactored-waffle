@@ -1,6 +1,5 @@
 import cors from 'cors'
 import express from 'express'
-import { appendFile } from 'fs'
 import { morganMiddleware } from './presentation/middlewares/morgan.middleware'
 
 const server = express()
