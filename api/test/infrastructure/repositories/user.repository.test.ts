@@ -1,9 +1,9 @@
 import User from '~/domain/entities/user'
 import { UserDataSource } from '../interfaces/data-sources/user-ds'
 import UserRepository from '../interfaces/repositories/user-repository'
-import { UserRepositoryImpl } from './user-repository'
-
+import { UserRepositoryImpl } from '~/infrastructure/repositories/user-repository'
 class MockUserDataSource implements UserDataSource {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create(user: User): Promise<boolean> {
     throw new Error('Method not implemented.')
   }

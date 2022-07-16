@@ -1,18 +1,18 @@
-version: '3.9'
+version: "3.9"
 
 services:
   mongodb:
     restart: always
     image: mongo:5.0
     ports:
-      - "27017:27017" 
+      - "${MONGODB_PORT}:${MONGODB_PORT}"
     volumes:
-      - './database:/data/db'
+      - "./database:/data/db"
     networks:
       - db
 
   api:
-    build: 
+    build:
       dockerfile: services/api/Dockerfile.dev
       context: .
     volumes:
@@ -20,28 +20,30 @@ services:
       - /usr/src/app/node_modules
     restart: always
     ports:
-      - "8080:8000"
+      - "${API_PORT}:${API_PORT}"
     depends_on:
       - mongodb
     command: yarn start:dev
+    env_file:
+      - .env
     networks:
       - frontend
       - db
 
-  next:
-    restart: always
-    depends_on: 
-      - api
-    build:
-        context: ./frontEnd
-    volumes:
-      - ./frontEnd:/usr/src/app
-      - /usr/src/app/node_modules 
-    ports:
-        - "3000:3000"
-    networks:
-      - frontend
-  
+  # next:
+  #   restart: always
+  #   depends_on:
+  #     - api
+  #   build:
+  #     context: ./frontEnd
+  #   volumes:
+  #     - ./frontEnd:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - frontend
+
   # nginx:
   #   restart: always
   #   build:

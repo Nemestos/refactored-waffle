@@ -113,5 +113,7 @@ chain.pem
 fullchain.pem
 privkey.pem
 
-database
+database/
 .DS_Store
+
+.env
