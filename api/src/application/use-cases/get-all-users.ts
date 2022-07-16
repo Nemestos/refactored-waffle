@@ -1,6 +1,6 @@
-import User from '../entities/user'
-import UserRepository from '../interfaces/repositories/user-repository'
-import GetAllUsersUseCase from '../interfaces/use-cases/user/get-all-users'
+import User from '~/domain/entities/user'
+import UserRepository from '~/domain/interfaces/repositories/user-repository'
+import GetAllUsersUseCase from '~/domain/interfaces/use-cases/user/get-all-users'
 
 export class GetAllUsers implements GetAllUsersUseCase {
   constructor(private readonly userRepository: UserRepository) {}

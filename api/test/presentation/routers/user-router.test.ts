@@ -3,8 +3,8 @@ import User from '~/domain/entities/user'
 import UsersRouter from '~/presentation/routers/user-router'
 import { StatusCodes } from 'http-status-codes'
 import server from '~/server'
-import GetAllUsersUseCase from '~/domain/interfaces/use-cases/user/get-all-users'
-import UserDto from '~/domain/dtos/user-dto'
+import UserDto, { convertUserToDto } from '~/domain/dtos/user-dto'
+import GetAllUsersUseCase, { GetAllUsersErrors } from '~/application/interfaces/uses-cases/user/get-all-users'
 
 class MockGetAllUsersUseCase implements GetAllUsersUseCase {
   execute(): Promise<User[]> {
@@ -24,9 +24,11 @@ describe('User Router', () => {
 
   describe('GET /users', () => {
     test('should return 200 with users data', async () => {
-      const mockedData: User = [{ id: '1', email: 'etna@gmail.com', firstname: 'Léo', surname: 'Turpin' }]
-      const expectedData: UserDto[] = [...mockedData]
-      jest.spyOn(mockGetAllUsersUseCase, 'execute').mockResolvedValue(expectedData)
+      const mockedData: User[] = [
+        { id: '1', email: 'etna@gmail.com', firstname: 'Léo', surname: 'Turpin', password: 'password' }
+      ]
+      const expectedData: UserDto[] = mockedData.map(convertUserToDto)
+      jest.spyOn(mockGetAllUsersUseCase, 'execute').mockResolvedValue(mockedData)
       const resp = await request(server).get('/users')
       expect(resp.status).toBe(StatusCodes.OK)
       expect(mockGetAllUsersUseCase.execute).toBeCalledTimes(1)
