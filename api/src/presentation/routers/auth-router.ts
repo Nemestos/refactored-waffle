@@ -1,18 +1,32 @@
-import express, { Request, Response } from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
+import SignupUseCase from '~/application/interfaces/uses-cases/auth/signup'
 import User from '~/domain/entities/user'
-import SignupUseCase from '~/domain/interfaces/use-cases/auth/signup'
-import { GetAllUsersErrors } from '~/domain/interfaces/use-cases/user/get-all-users'
+import 'express-async-errors'
+import { UserCreateValidator } from '~/domain/validators/user-validator'
+import { validate } from 'class-validator'
+import { ErrorException } from '~/domain/errors/error-exception'
+import { ErrorCode } from '~/domain/errors/error-code'
 
 export default function AuthRouter(signupUseCase: SignupUseCase) {
   const router = express.Router()
-  router.post('/signup', async (req: Request, res: Response) => {
+  router.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
+    const userValidation = new UserCreateValidator()
+    userValidation.email = req.body.email
+    userValidation.firstname = req.body.firstname
+    userValidation.surname = req.body.surname
+    userValidation.password = req.body.password
+    const errors = await validate(userValidation)
+    if (errors.length) {
+      throw new ErrorException(ErrorCode.ValidationError, errors)
+    }
     try {
       await signupUseCase.execute(req.body as User)
       res.statusCode = StatusCodes.CREATED
       res.json({ message: "L'utilisateur a bien été crée" })
     } catch (err) {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: GetAllUsersErrors.INTERNAL_SERVER_ERROR })
+      next(err)
     }
   })
+  return router
 }

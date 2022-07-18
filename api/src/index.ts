@@ -1,5 +1,5 @@
 import { config } from './config'
-import { GetAllUsers } from './application/use-cases/get-all-users'
+import { GetAllUsers } from './application/use-cases/user/get-all-users'
 import UsersRouter from './presentation/routers/user-router'
 import server from './server'
 import { UserRepositoryImpl } from '~/infrastructure/repositories/user-repository'
@@ -7,6 +7,10 @@ import { MongoUserDataSource } from '~/infrastructure/providers/mongoose/data-so
 import { connect } from 'mongoose'
 import { logger } from '~/utils/logger'
 import { exit } from 'process'
+import AuthRouter from '~/presentation/routers/auth-router'
+import { Signup } from '~/application/use-cases/auth/signup'
+import { BcryptHasher } from '~/utils/bcrypt-hasher'
+import { errorHandler } from '~/presentation/middlewares/error-handler.middleware'
 ;(async () => {
   await connect(`mongodb://${config.DB_HOST}:${config.DB_PORT}/${config.DB}`)
     .then(() => logger.info('successfully connected to db'))
@@ -14,7 +18,11 @@ import { exit } from 'process'
       logger.error(reason)
       exit()
     })
-  const userMiddleware = UsersRouter(new GetAllUsers(new UserRepositoryImpl(new MongoUserDataSource())))
-  server.use('/user', userMiddleware)
+  const userRepo = new UserRepositoryImpl(new MongoUserDataSource())
+  const userMiddleware = UsersRouter(new GetAllUsers(userRepo))
+  const authMiddleware = AuthRouter(new Signup(userRepo, new BcryptHasher()))
+  server.use('/users', userMiddleware)
+  server.use('/auth', authMiddleware)
+  server.use(errorHandler)
   server.listen(config.PORT, () => logger.info('application running without eating rabbits'))
 })()

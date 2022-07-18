@@ -13,6 +13,7 @@
     "skipDefaultLibCheck": true,
     "outDir": "./dist",
     "strictPropertyInitialization": false,
+    "experimentalDecorators": true,
     "rootDirs": ["src", "test"],
     "paths": {
       "~/*": ["./src/*"],

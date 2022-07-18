@@ -8,6 +8,8 @@ services:
       - "${MONGODB_PORT}:${MONGODB_PORT}"
     volumes:
       - "./database:/data/db"
+    command: --quiet
+
     networks:
       - db
 

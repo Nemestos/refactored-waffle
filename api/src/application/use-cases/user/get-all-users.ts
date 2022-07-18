@@ -5,7 +5,6 @@ import UserRepository from '~/infrastructure/interfaces/repositories/user-reposi
 export class GetAllUsers implements GetAllUsersUseCase {
   constructor(private readonly userRepository: UserRepository) {}
   async execute(): Promise<User[]> {
-    const res = await this.userRepository.getUsers()
-    return res
+    return await this.userRepository.getUsers()
   }
 }
