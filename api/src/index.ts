@@ -24,7 +24,7 @@ import UsersRouter from '~/presentation/routers/user-router'
   const userRepo = new UserRepositoryImpl(new MongoUserDataSource())
   const passwordHasher = new BcryptHasher()
   const jwt = new UserJwt()
-  const userMiddleware = UsersRouter(new GetAllUsers(userRepo))
+  const userMiddleware = UsersRouter(new GetAllUsers(userRepo), jwt)
   const authMiddleware = AuthRouter(new Signup(userRepo, passwordHasher), new Signin(userRepo, passwordHasher, jwt))
   server.use('/users', userMiddleware)
   server.use('/auth', authMiddleware)
