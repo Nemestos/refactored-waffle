@@ -16,7 +16,6 @@ export class Signup implements SignupUseCase {
     }
     const hash = await this.passwordHasher.passwordHash(user.password)
     const newUser = { ...user, password: hash } as User
-    const createdUser = await this.userRepository.createUser(newUser)
-    return createdUser
+    return await this.userRepository.createUser(newUser)
   }
 }

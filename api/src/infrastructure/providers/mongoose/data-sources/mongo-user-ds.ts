@@ -15,12 +15,7 @@ export class MongoUserDataSource implements UserDataSource {
   }
 
   async getAll(): Promise<User[]> {
-    const res = await UserModel.find({})
-    return res.map((item) => {
-      return {
-        id: item._id.toString(),
-        ...item
-      } as User
-    })
+    const res = await UserModel.find({}).lean().exec()
+    return res
   }
 }

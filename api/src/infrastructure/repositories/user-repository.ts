@@ -19,6 +19,7 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   async getUsers(): Promise<User[]> {
-    return await this.userDataSource.getAll()
+    const res = await this.userDataSource.getAll()
+    return res
   }
 }
