@@ -14,6 +14,7 @@
     "skipDefaultLibCheck": true,
     "outDir": "./dist",
     "strictPropertyInitialization": false,
+    "useUnknownInCatchVariables": false,
     "experimentalDecorators": true,
     "rootDirs": ["src", "test"],
     "paths": {

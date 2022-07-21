@@ -17,11 +17,11 @@ export class Signin implements SigninUseCase {
   async execute(user: UserSigninDto): Promise<string> {
     const existingUser = await this.userRepository.findUserByEmail(user.email)
     if (!existingUser) {
-      throw new ErrorException(ErrorCode.Unauthenticated)
+      throw new ErrorException(ErrorCode.UnauthenticatedError)
     }
     const validPassword = await this.passwordHasher.comparePasswords(user.password, existingUser.password)
     if (!validPassword) {
-      throw new ErrorException(ErrorCode.Unauthenticated)
+      throw new ErrorException(ErrorCode.UnauthenticatedError)
     }
     return this.jwtService.generateToken(existingUser)
   }
