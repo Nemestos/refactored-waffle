@@ -1,2 +1,4 @@
-# Groupe de coste_c 984754
+```
+docker-compose up
+```
 
