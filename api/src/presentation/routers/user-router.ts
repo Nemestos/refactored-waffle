@@ -4,12 +4,13 @@ import { StatusCodes } from 'http-status-codes'
 import GetAllUsersUseCase from '~/application/interfaces/uses-cases/user/get-all-users'
 import { Groups } from '~/domain/base/groups'
 import User from '~/domain/entities/user'
+import { Scopes } from '~/domain/enums/scope-enum'
 import { Jwt } from '~/domain/interfaces/jwt'
 import { authMiddleware } from '~/presentation/middlewares/auth.middleware'
 import { transform } from '~/presentation/middlewares/response-wrapper.middleware'
 export default function UsersRouter(getAllUsersUseCase: GetAllUsersUseCase, jwtService: Jwt<any>) {
   const router = express.Router()
-  const basicJwtMiddleware = authMiddleware(jwtService)
+  const basicJwtMiddleware = authMiddleware(jwtService, [Scopes.CanGetUsers])
   router.get('/', basicJwtMiddleware, async (req: Request, res: Response, next: NextFunction) => {
     try {
       const users = await getAllUsersUseCase.execute()

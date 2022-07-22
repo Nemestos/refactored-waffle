@@ -2,6 +2,7 @@ import { StatusCodes } from 'http-status-codes'
 
 export class ErrorCode {
   public static readonly UnauthenticatedError = "Vous n'êtes pas authentifié.e"
+  public static readonly UnauthorizeError = "Vous n'avez pas assez de droit pour accéder à cette ressource"
   public static readonly MissingTokenError = 'Veuillez passer un token pour accéder à cette ressource'
   public static readonly ExpiredTokenError = "Le token n'est plus valable"
   public static readonly ValidationError = "Vous n'avez pas envoyé la bonne structure"
@@ -12,6 +13,7 @@ export class ErrorCode {
 }
 export const ErrorCodeStatus: Map<ErrorCode, StatusCodes> = new Map([
   [ErrorCode.UnauthenticatedError, StatusCodes.UNAUTHORIZED],
+  [ErrorCode.UnauthorizeError, StatusCodes.UNAUTHORIZED],
   [ErrorCode.MissingTokenError, StatusCodes.UNAUTHORIZED],
   [ErrorCode.ExpiredTokenError, StatusCodes.UNAUTHORIZED],
   [ErrorCode.ValidationError, StatusCodes.BAD_REQUEST],

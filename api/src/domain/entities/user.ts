@@ -3,6 +3,7 @@ import { IsEmail, IsNotEmpty, IsOptional, IsString, Length } from 'class-validat
 import { ApiObject } from '~/domain/base/api-object'
 import { Groups } from '~/domain/base/groups'
 import { prop } from '@typegoose/typegoose'
+import { DefaultBasicUserScope, Scopes } from '~/domain/enums/scope-enum'
 @Exclude()
 export default class User extends ApiObject<string> {
   @prop()
@@ -40,4 +41,7 @@ export default class User extends ApiObject<string> {
     groups: [Groups.CREATE, Groups.UPDATE]
   })
   surname: string
+
+  @prop({ required: true, type: String, enum: Scopes, default: DefaultBasicUserScope })
+  scopes: Scopes[]
 }
