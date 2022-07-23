@@ -5,4 +5,5 @@ export default interface UserRepository {
   createUser(user: UserCreationDto): Promise<boolean>
   getUsers(): Promise<User[]>
   findUserByEmail(email: string): Promise<User | null>
+  findUserById(id: string): Promise<User | null>
 }
