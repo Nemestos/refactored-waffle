@@ -1,14 +1,21 @@
-import express, { Request, Response } from 'express'
+import express, { NextFunction, Request, Response } from 'express'
+import 'express-async-errors'
 import { StatusCodes } from 'http-status-codes'
-import GetAllUsersUseCase, { GetAllUsersErrors } from '~/domain/interfaces/use-cases/user/get-all-users'
-export default function UsersRouter(getAllUsersUseCase: GetAllUsersUseCase) {
+import GetAllUsersUseCase from '~/application/interfaces/uses-cases/user/get-all-users'
+import { Groups } from '~/domain/base/groups'
+import User from '~/domain/entities/user'
+import { Jwt } from '~/domain/interfaces/jwt'
+import { authMiddleware } from '~/presentation/middlewares/auth.middleware'
+import { transform } from '~/presentation/middlewares/response-wrapper.middleware'
+export default function UsersRouter(getAllUsersUseCase: GetAllUsersUseCase, jwtService: Jwt<any>) {
   const router = express.Router()
-  router.get('/', async (req: Request, res: Response) => {
+  const basicJwtMiddleware = authMiddleware(jwtService)
+  router.get('/', basicJwtMiddleware, async (req: Request, res: Response, next: NextFunction) => {
     try {
       const users = await getAllUsersUseCase.execute()
-      res.send(users)
-    } catch (err) {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: GetAllUsersErrors.INTERNAL_SERVER_ERROR })
+      return res.status(StatusCodes.OK).json(transform(User, users, [Groups.READ]))
+    } catch (error) {
+      next(error)
     }
   })
 

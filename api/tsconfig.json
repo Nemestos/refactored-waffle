@@ -6,6 +6,7 @@
     "lib": ["esnext", "DOM.Iterable"],
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "strictNullChecks": true,
@@ -13,6 +14,8 @@
     "skipDefaultLibCheck": true,
     "outDir": "./dist",
     "strictPropertyInitialization": false,
+    "useUnknownInCatchVariables": false,
+    "experimentalDecorators": true,
     "rootDirs": ["src", "test"],
     "paths": {
       "~/*": ["./src/*"],
