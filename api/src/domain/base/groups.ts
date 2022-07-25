@@ -4,7 +4,13 @@ export class Groups {
   public static readonly UPDATE = 'update'
   public static readonly AUTH = 'auth'
 
-  public static all() {
-    return [this.CREATE, this.READ, this.UPDATE, this.AUTH]
+  public static basicAll() {
+    return [this.CREATE, this.READ, this.UPDATE]
+  }
+
+  public static authAll() {
+    const basic = this.basicAll()
+    basic.push(...[this.AUTH])
+    return basic
   }
 }

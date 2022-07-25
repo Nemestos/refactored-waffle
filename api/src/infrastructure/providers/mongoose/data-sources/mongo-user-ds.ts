@@ -18,4 +18,9 @@ export class MongoUserDataSource implements UserDataSource {
     const res = await UserModel.find({}).lean().exec()
     return res
   }
+
+  async getById(id: string): Promise<User | null> {
+    const res = await UserModel.findById(id).lean().exec()
+    return res
+  }
 }

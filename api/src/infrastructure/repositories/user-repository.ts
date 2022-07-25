@@ -22,4 +22,9 @@ export class UserRepositoryImpl implements UserRepository {
     const res = await this.userDataSource.getAll()
     return res
   }
+
+  async findUserById(id: string): Promise<User | null> {
+    const res = await this.userDataSource.getById(id)
+    return res
+  }
 }

@@ -14,6 +14,7 @@ import { errorHandler } from '~/presentation/middlewares/error-handler.middlewar
 import { Signin } from '~/application/use-cases/auth/signin'
 import { UserJwt } from '~/utils/user-jwt'
 import UsersRouter from '~/presentation/routers/user-router'
+import { GetUserById } from './application/use-cases/user/get-user-by-id'
 ;(async () => {
   await connect(`mongodb://${config.DB_HOST}:${config.DB_PORT}/${config.DB}`)
     .then(() => logger.info('successfully connected to db'))
@@ -24,7 +25,7 @@ import UsersRouter from '~/presentation/routers/user-router'
   const userRepo = new UserRepositoryImpl(new MongoUserDataSource())
   const passwordHasher = new BcryptHasher()
   const jwt = new UserJwt()
-  const userMiddleware = UsersRouter(new GetAllUsers(userRepo), jwt)
+  const userMiddleware = UsersRouter(new GetAllUsers(userRepo), new GetUserById(userRepo), jwt)
   const authMiddleware = AuthRouter(new Signup(userRepo, passwordHasher), new Signin(userRepo, passwordHasher, jwt))
   server.use('/users', userMiddleware)
   server.use('/auth', authMiddleware)

@@ -2,11 +2,13 @@ import { Exclude, Expose } from 'class-transformer'
 import { IsEmail, IsNotEmpty, IsOptional, IsString, Length } from 'class-validator'
 import { ApiObject } from '~/domain/base/api-object'
 import { Groups } from '~/domain/base/groups'
-import { prop } from '@typegoose/typegoose'
+import { prop, Ref } from '@typegoose/typegoose'
+import { DefaultBasicUserScope, Scopes } from '~/domain/enums/scope-enum'
+import Moto from './moto'
 @Exclude()
 export default class User extends ApiObject<string> {
   @prop()
-  @Expose({ groups: Groups.all() })
+  @Expose({ groups: Groups.authAll() })
   @IsOptional({ groups: [Groups.UPDATE] })
   @IsNotEmpty({ groups: [Groups.CREATE, Groups.AUTH] })
   @IsEmail({}, { groups: [Groups.CREATE, Groups.UPDATE, Groups.AUTH] })
@@ -22,7 +24,7 @@ export default class User extends ApiObject<string> {
   password: string
 
   @prop()
-  @Expose({ groups: [Groups.CREATE, Groups.READ, Groups.UPDATE] })
+  @Expose({ groups: Groups.basicAll() })
   @IsOptional({ groups: [Groups.UPDATE] })
   @IsNotEmpty({ groups: [Groups.CREATE] })
   @IsString({ groups: [Groups.CREATE, Groups.UPDATE] })
@@ -32,7 +34,7 @@ export default class User extends ApiObject<string> {
   firstname: string
 
   @prop()
-  @Expose({ groups: [Groups.CREATE, Groups.READ, Groups.UPDATE] })
+  @Expose({ groups: Groups.basicAll() })
   @IsOptional({ groups: [Groups.UPDATE] })
   @IsNotEmpty({ groups: [Groups.CREATE] })
   @IsString({ groups: [Groups.CREATE, Groups.UPDATE] })
@@ -40,4 +42,12 @@ export default class User extends ApiObject<string> {
     groups: [Groups.CREATE, Groups.UPDATE]
   })
   surname: string
+
+  @prop({ required: true, type: String, enum: Scopes, default: DefaultBasicUserScope })
+  @Expose({ groups: [Groups.READ] })
+  scopes: Scopes[]
+
+  @prop({ required: false, ref: () => Moto })
+  @Expose({ groups: [Groups.READ] })
+  motos: Ref<Moto>[]
 }
