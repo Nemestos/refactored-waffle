@@ -12,7 +12,7 @@ export class ApiObject<T> {
   _id?: T
 
   @Exclude()
-  public __v: number
+  public __v?: number
 
   @Expose({ groups: [Groups.READ] })
   createdAt: string

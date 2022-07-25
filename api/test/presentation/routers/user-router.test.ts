@@ -3,8 +3,10 @@ import User from '~/domain/entities/user'
 import UsersRouter from '~/presentation/routers/user-router'
 import { StatusCodes } from 'http-status-codes'
 import server from '~/server'
-import GetAllUsersUseCase, { GetAllUsersErrors } from '~/application/interfaces/uses-cases/user/get-all-users'
+import GetAllUsersUseCase from '~/application/interfaces/uses-cases/user/get-all-users'
 import { UserApiDto } from '~/domain/dtos/user-dto'
+import GetUserByIdUseCase from '~/application/interfaces/uses-cases/user/get-user-by-id'
+import { UserJwt } from '~/utils/user-jwt'
 
 class MockGetAllUsersUseCase implements GetAllUsersUseCase {
   execute(): Promise<User[]> {
@@ -12,18 +14,30 @@ class MockGetAllUsersUseCase implements GetAllUsersUseCase {
   }
 }
 
+class MockGetUserByIdUseCase implements GetUserByIdUseCase {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  execute(id: string): Promise<User | null> {
+    throw new Error('not impl')
+  }
+}
+
 describe('User Router', () => {
   let mockGetAllUsersUseCase: GetAllUsersUseCase
+  let mockGetUserByIdUseCase: GetUserByIdUseCase
+  const jwt = new UserJwt()
+  let token
+
   beforeAll(() => {
     mockGetAllUsersUseCase = new MockGetAllUsersUseCase()
-    server.use('/users', UsersRouter(mockGetAllUsersUseCase))
+    mockGetUserByIdUseCase = new MockGetUserByIdUseCase()
+    server.use('/users', UsersRouter(mockGetAllUsersUseCase, mockGetUserByIdUseCase, jwt))
   })
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
   describe('GET /users', () => {
-    test('should return 200 with users data', async () => {
+    test('should return 200 with users data when auth', async () => {
       const mockedData: User[] = [
         {
           _id: '1',
@@ -31,6 +45,8 @@ describe('User Router', () => {
           firstname: 'Léo',
           surname: 'Turpin',
           password: 'password',
+          scopes: [],
+          motos: [],
           createdAt: '2022-01-01',
           updatedAt: '2022-01-01'
         }
@@ -46,7 +62,6 @@ describe('User Router', () => {
       jest.spyOn(mockGetAllUsersUseCase, 'execute').mockRejectedValue(Error())
       const resp = await request(server).get('/users')
       expect(resp.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR)
-      expect(resp.body).toStrictEqual({ message: GetAllUsersErrors.INTERNAL_SERVER_ERROR })
     })
   })
 })
