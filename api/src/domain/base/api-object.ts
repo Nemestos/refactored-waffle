@@ -15,8 +15,8 @@ export class ApiObject<T> {
   public __v?: number
 
   @Expose({ groups: [Groups.READ] })
-  createdAt: string
+  createdAt?: string
 
   @Expose({ groups: [Groups.READ] })
-  updatedAt: string
+  updatedAt?: string
 }

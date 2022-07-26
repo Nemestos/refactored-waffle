@@ -12,7 +12,7 @@ export default class User extends ApiObject<string> {
   @IsOptional({ groups: [Groups.UPDATE] })
   @IsNotEmpty({ groups: [Groups.CREATE, Groups.AUTH] })
   @IsEmail({}, { groups: [Groups.CREATE, Groups.UPDATE, Groups.AUTH] })
-  email: string
+  public email: string
 
   @prop()
   @Expose({ groups: [Groups.CREATE, Groups.AUTH] })
@@ -21,7 +21,7 @@ export default class User extends ApiObject<string> {
   @Length(8, 255, {
     groups: [Groups.CREATE]
   })
-  password: string
+  public password: string
 
   @prop()
   @Expose({ groups: Groups.basicAll() })
@@ -31,7 +31,7 @@ export default class User extends ApiObject<string> {
   @Length(1, 255, {
     groups: [Groups.CREATE, Groups.UPDATE]
   })
-  firstname: string
+  public firstname: string
 
   @prop()
   @Expose({ groups: Groups.basicAll() })
@@ -41,13 +41,13 @@ export default class User extends ApiObject<string> {
   @Length(1, 255, {
     groups: [Groups.CREATE, Groups.UPDATE]
   })
-  surname: string
+  public surname: string
 
   @prop({ required: true, type: String, enum: Scopes, default: DefaultBasicUserScope })
   @Expose({ groups: [Groups.READ] })
-  scopes: Scopes[]
+  public scopes: Scopes[]
 
   @prop({ required: false, ref: () => Moto })
   @Expose({ groups: [Groups.READ] })
-  motos: Ref<Moto>[]
+  public motos?: Ref<Moto[]>
 }

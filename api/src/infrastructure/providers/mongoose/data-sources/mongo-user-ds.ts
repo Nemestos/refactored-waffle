@@ -1,4 +1,5 @@
 import { UserCreationDto } from '~/domain/dtos/user-dto'
+import Moto from '~/domain/entities/moto'
 import User from '~/domain/entities/user'
 import { UserDataSource } from '~/infrastructure/interfaces/data-sources/user-ds'
 import { UserModel } from '~/infrastructure/providers/mongoose/schemas/user-schema'
@@ -15,7 +16,7 @@ export class MongoUserDataSource implements UserDataSource {
   }
 
   async getAll(): Promise<User[]> {
-    const res = await UserModel.find({}).lean().exec()
+    const res = await UserModel.find({}).populate('motos').exec()
     return res
   }
 
