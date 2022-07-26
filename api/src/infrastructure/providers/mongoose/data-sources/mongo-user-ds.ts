@@ -21,7 +21,7 @@ export class MongoUserDataSource implements UserDataSource {
   }
 
   async getById(id: string): Promise<User | null> {
-    const res = await UserModel.findById(id).lean().exec()
+    const res = await UserModel.findById(id).populate({ path: 'motos', model: MotoModel }).lean().exec()
     return res
   }
 }

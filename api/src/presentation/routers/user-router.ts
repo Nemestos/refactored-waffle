@@ -8,7 +8,7 @@ import User from '~/domain/entities/user'
 import Moto from '~/domain/entities/moto'
 import { Scopes } from '~/domain/enums/scope-enum'
 import { Jwt } from '~/domain/interfaces/jwt'
-import { ResponseStructureArray } from '~/domain/types/response-structure'
+import { ResponseStructureArray, ResponseStructureSingle } from '~/domain/types/response-structure'
 import { authMiddleware } from '~/presentation/middlewares/auth.middleware'
 import { transform } from '~/presentation/middlewares/response-wrapper.middleware'
 export default function UsersRouter(
@@ -22,10 +22,7 @@ export default function UsersRouter(
     try {
       const users = await getAllUsersUseCase.execute()
       const transformedUsers = transform(User, users, [Groups.READ]) as ResponseStructureArray<User>
-      // transformedUsers.data.forEach((user) => {
-      //   const transformedMoto = transform(Moto, user.motos, [Groups.READ]) as ResponseStructureArray<Moto>
-      //   user.motos = transformedMoto.data
-      // })
+
       return res.status(StatusCodes.OK).json(transformedUsers)
     } catch (error) {
       next(error)
@@ -36,7 +33,8 @@ export default function UsersRouter(
     const id = req.params.id
     try {
       const user = await getUserByIdUserCase.execute(id)
-      return res.status(StatusCodes.OK).json(transform(User, user, [Groups.READ]))
+      const transformedUser = transform(User, user, [Groups.READ]) as ResponseStructureSingle<User>
+      return res.status(StatusCodes.OK).json(transformedUser)
     } catch (error) {
       next(error)
     }
