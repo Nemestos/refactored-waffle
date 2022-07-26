@@ -5,8 +5,10 @@ import GetAllUsersUseCase from '~/application/interfaces/uses-cases/user/get-all
 import GetUserByIdUseCase from '~/application/interfaces/uses-cases/user/get-user-by-id'
 import { Groups } from '~/domain/base/groups'
 import User from '~/domain/entities/user'
+import Moto from '~/domain/entities/moto'
 import { Scopes } from '~/domain/enums/scope-enum'
 import { Jwt } from '~/domain/interfaces/jwt'
+import { ResponseStructureArray, ResponseStructureSingle } from '~/domain/types/response-structure'
 import { authMiddleware } from '~/presentation/middlewares/auth.middleware'
 import { transform } from '~/presentation/middlewares/response-wrapper.middleware'
 export default function UsersRouter(
@@ -19,7 +21,9 @@ export default function UsersRouter(
   router.get('/', basicJwtMiddleware, async (req: Request, res: Response, next: NextFunction) => {
     try {
       const users = await getAllUsersUseCase.execute()
-      return res.status(StatusCodes.OK).json(transform(User, users, [Groups.READ]))
+      const transformedUsers = transform(User, users, [Groups.READ]) as ResponseStructureArray<User>
+
+      return res.status(StatusCodes.OK).json(transformedUsers)
     } catch (error) {
       next(error)
     }
@@ -29,7 +33,8 @@ export default function UsersRouter(
     const id = req.params.id
     try {
       const user = await getUserByIdUserCase.execute(id)
-      return res.status(StatusCodes.OK).json(transform(User, user, [Groups.READ]))
+      const transformedUser = transform(User, user, [Groups.READ]) as ResponseStructureSingle<User>
+      return res.status(StatusCodes.OK).json(transformedUser)
     } catch (error) {
       next(error)
     }

@@ -12,11 +12,11 @@ export class ApiObject<T> {
   _id?: T
 
   @Exclude()
-  public __v: number
+  public __v?: number
 
   @Expose({ groups: [Groups.READ] })
-  createdAt: string
+  createdAt?: string
 
   @Expose({ groups: [Groups.READ] })
-  updatedAt: string
+  updatedAt?: string
 }

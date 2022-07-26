@@ -4,9 +4,7 @@ import { GetAllUsers } from './application/use-cases/user/get-all-users'
 import server from './server'
 import { UserRepositoryImpl } from '~/infrastructure/repositories/user-repository'
 import { MongoUserDataSource } from '~/infrastructure/providers/mongoose/data-sources/mongo-user-ds'
-import { connect } from 'mongoose'
 import { logger } from '~/utils/logger'
-import { exit } from 'process'
 import AuthRouter from '~/presentation/routers/auth-router'
 import { Signup } from '~/application/use-cases/auth/signup'
 import { BcryptHasher } from '~/utils/bcrypt-hasher'
@@ -15,13 +13,9 @@ import { Signin } from '~/application/use-cases/auth/signin'
 import { UserJwt } from '~/utils/user-jwt'
 import UsersRouter from '~/presentation/routers/user-router'
 import { GetUserById } from './application/use-cases/user/get-user-by-id'
+import { connectToMongo } from './infrastructure/providers/mongoose/connector'
 ;(async () => {
-  await connect(`mongodb://${config.DB_HOST}:${config.DB_PORT}/${config.DB}`)
-    .then(() => logger.info('successfully connected to db'))
-    .catch((reason) => {
-      logger.error(reason)
-      exit()
-    })
+  await connectToMongo()
   const userRepo = new UserRepositoryImpl(new MongoUserDataSource())
   const passwordHasher = new BcryptHasher()
   const jwt = new UserJwt()

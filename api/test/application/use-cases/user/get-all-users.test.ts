@@ -5,6 +5,11 @@ import UserRepository from '~/infrastructure/interfaces/repositories/user-reposi
 describe('Get all users use case', () => {
   class MockUserRepository implements UserRepository {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    findUserById(id: string): Promise<User | null> {
+      throw new Error('Method not implemented.')
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     findUserByEmail(_email: string): Promise<User | null> {
       throw new Error('Method not implemented.')
     }
@@ -33,6 +38,8 @@ describe('Get all users use case', () => {
         firstname: 'Léo',
         surname: 'Turpin',
         password: 'password',
+        scopes: [],
+        motos: [],
         createdAt: '2022-01-01',
         updatedAt: '2022-01-01'
       }

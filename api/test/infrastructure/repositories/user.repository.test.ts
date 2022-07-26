@@ -6,6 +6,10 @@ import { UserCreationDto } from '~/domain/dtos/user-dto'
 
 class MockUserDataSource implements UserDataSource {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getById(id: string): Promise<User | null> {
+    throw new Error('Method not implemented.')
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, lines-between-class-members
   getByEmail(email: string): Promise<User | null> {
     throw new Error('Method not implemented.')
   }
@@ -38,6 +42,8 @@ describe('User Repository', () => {
           firstname: 'Léo',
           surname: 'Turpin',
           password: 'password',
+          scopes: [],
+          motos: [],
           createdAt: '2022-01-01',
           updatedAt: '2022-01-01'
         }
