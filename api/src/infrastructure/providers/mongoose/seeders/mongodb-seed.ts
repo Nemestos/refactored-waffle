@@ -29,7 +29,7 @@ export async function clear() {
 
 export async function seedUsers() {
   const hasher = new BcryptHasher()
-  UserModel.create({
+  await UserModel.create({
     email: 'admin@example.com',
     password: await hasher.passwordHash(config.ADMIN_PASSWORD),
     firstname: faker.name.firstName(),
@@ -52,9 +52,10 @@ export async function seedUsers() {
     users.push(user)
   }
 
-  UserModel.insertMany(users)
+  await UserModel.insertMany(users)
   logger.info(`${USERS_COUNT} users created`)
 }
+
 export async function seedMotos() {
   const motos = await getMotos()
   const randomsMotos = choices(motos, MOTOS_COUNT)
@@ -65,22 +66,26 @@ export async function seedMotos() {
       model: moto.model
     } as Moto
   })
-  MotoModel.insertMany(randomMotosTyped)
+  await MotoModel.insertMany(randomMotosTyped)
   logger.info(`${MOTOS_COUNT} motos created`)
 }
 
 export async function addMotosToUsers() {
   const motos = await MotoModel.find({}).exec()
-  const users = await UserModel.find({}).exec()
-  logger.info(motos)
-  users.forEach((user) => {
-    for (let i = 0; i < USERS_MOTOS; i++) {
-      const randomMoto = motos[Math.floor(Math.random() * motos.length)]
-      user.motos.push(randomMoto._id)
-    }
-    user.save()
+  UserModel.find({}).then((users) => {
+    users.forEach((user) => {
+      user.motos = []
+
+      for (let i = 0; i < USERS_MOTOS; i++) {
+        const randomMoto = motos[Math.floor(Math.random() * motos.length)]
+        user.motos?.push(randomMoto._id)
+        logger.info(`adding moto ${randomMoto.model} to ${user.firstname}`)
+      }
+      user.save()
+    })
   })
 }
+
 export async function seed() {
   await seedMotos()
   await seedUsers()

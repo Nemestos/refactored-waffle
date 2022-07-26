@@ -49,5 +49,5 @@ export default class User extends ApiObject<string> {
 
   @prop({ required: false, ref: () => Moto })
   @Expose({ groups: [Groups.READ] })
-  public motos?: Ref<Moto[]>
+  public motos?: Ref<Moto>[]
 }

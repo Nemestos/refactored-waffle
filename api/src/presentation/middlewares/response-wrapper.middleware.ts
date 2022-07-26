@@ -1,14 +1,13 @@
-import { ClassConstructor, instanceToPlain, plainToInstance } from 'class-transformer'
-import { NextFunction, Request, Response } from 'express'
-import { Groups } from '~/domain/base/groups'
+import { ClassConstructor, plainToInstance } from 'class-transformer'
+import { ResponseStructure } from '~/domain/types/response-structure'
 
-export function transform<T>(type: ClassConstructor<T>, body: T | T[], groups: string[]) {
+export function transform<T>(type: ClassConstructor<T>, body: T | T[], groups: string[]): ResponseStructure<T> {
   return Array.isArray(body)
     ? {
         object: 'list',
         data: body.map((item) =>
-          plainToInstance(type, item, { groups, excludeExtraneousValues: true, enableImplicitConversion: true })
+          plainToInstance(type, item, { groups, excludeExtraneousValues: true, enableImplicitConversion: false })
         )
       }
-    : plainToInstance(type, body, { groups, excludeExtraneousValues: true, enableImplicitConversion: true })
+    : plainToInstance(type, body, { groups, excludeExtraneousValues: true, enableImplicitConversion: false })
 }

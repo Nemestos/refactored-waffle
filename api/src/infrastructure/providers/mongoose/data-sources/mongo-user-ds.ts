@@ -1,8 +1,8 @@
 import { UserCreationDto } from '~/domain/dtos/user-dto'
-import Moto from '~/domain/entities/moto'
 import User from '~/domain/entities/user'
 import { UserDataSource } from '~/infrastructure/interfaces/data-sources/user-ds'
 import { UserModel } from '~/infrastructure/providers/mongoose/schemas/user-schema'
+import { MotoModel } from '../schemas/moto-schema'
 
 export class MongoUserDataSource implements UserDataSource {
   async getByEmail(email: string): Promise<User | null> {
@@ -16,7 +16,7 @@ export class MongoUserDataSource implements UserDataSource {
   }
 
   async getAll(): Promise<User[]> {
-    const res = await UserModel.find({}).populate('motos').exec()
+    const res = await UserModel.find({}).populate({ path: 'motos', model: MotoModel }).lean().exec()
     return res
   }
 

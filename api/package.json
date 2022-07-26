@@ -11,6 +11,7 @@
     "mongo:seed:all": "ts-node src/infrastructure/providers/mongoose/seeders/mongodb-seed.ts all",
     "mongo:seed:users": "ts-node src/infrastructure/providers/mongoose/seeders/mongodb-seed.ts users",
     "mongo:seed:motos": "ts-node src/infrastructure/providers/mongoose/seeders/mongodb-seed.ts motos",
+    "mongo:seed:link": "ts-node src/infrastructure/providers/mongoose/seeders/mongodb-seed.ts link",
     "build": "tsup src/index.ts --clean",
     "lint": "eslint . --ext .js,.ts",
     "lint-fix": "npm run lint -- --fix",
