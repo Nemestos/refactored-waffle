@@ -8,6 +8,12 @@ import { UserSigninDto } from '~/domain/dtos/user-dto'
 import { validateBody } from '~/presentation/middlewares/validate-body.middleware'
 import { Groups } from '~/domain/base/groups'
 
+/**
+ *
+ * @param signupUseCase the signup use case dependency for handle user signup with exception throw
+ * @param signinUseCase  the signin use case dependency for handle user signin and token generation with exception throw
+ * @returns the router with all routes
+ */
 export default function AuthRouter(signupUseCase: SignupUseCase, signinUseCase: SigninUseCase) {
   const router = express.Router()
   router.post(

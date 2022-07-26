@@ -5,7 +5,6 @@ import { Scopes } from '~/domain/enums/scope-enum'
 import { ErrorCode } from '~/domain/errors/error-code'
 import { ErrorException } from '~/domain/errors/error-exception'
 import { Jwt } from '~/domain/interfaces/jwt'
-import { logger } from '~/utils/logger'
 
 export const authMiddleware = (jwtService: Jwt<UserJwtPayloadDto>, scopes: Scopes[] = []) => {
   return (req: Request, res: Response, next: NextFunction) => {

@@ -10,6 +10,10 @@ export class UserRepositoryImpl implements UserRepository {
     this.userDataSource = userDataSource
   }
 
+  async userExist(id: string): Promise<boolean> {
+    return await this.userDataSource.userExist(id)
+  }
+
   async findUserByEmail(email: string): Promise<User | null> {
     return await this.userDataSource.getByEmail(email)
   }
@@ -26,5 +30,9 @@ export class UserRepositoryImpl implements UserRepository {
   async findUserById(id: string): Promise<User | null> {
     const res = await this.userDataSource.getById(id)
     return res
+  }
+
+  async deleteUserById(id: string): Promise<void> {
+    await this.userDataSource.deleteById(id)
   }
 }

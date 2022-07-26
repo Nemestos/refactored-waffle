@@ -5,8 +5,13 @@ import { UserModel } from '~/infrastructure/providers/mongoose/schemas/user-sche
 import { MotoModel } from '../schemas/moto-schema'
 
 export class MongoUserDataSource implements UserDataSource {
-  async getByEmail(email: string): Promise<User | null> {
-    return await UserModel.findOne({ email })
+  async userExist(id: string): Promise<boolean> {
+    const res = await UserModel.exists({ _id: id })
+    return res != null
+  }
+
+  async deleteById(id: string): Promise<void> {
+    await UserModel.deleteOne({ _id: id })
   }
 
   async create(user: UserCreationDto): Promise<boolean> {
@@ -22,6 +27,11 @@ export class MongoUserDataSource implements UserDataSource {
 
   async getById(id: string): Promise<User | null> {
     const res = await UserModel.findById(id).populate({ path: 'motos', model: MotoModel }).lean().exec()
+    return res
+  }
+
+  async getByEmail(email: string): Promise<User | null> {
+    const res = await UserModel.findOne({ email }).populate({ path: 'motos', model: MotoModel }).lean().exec()
     return res
   }
 }

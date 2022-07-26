@@ -30,7 +30,7 @@ export async function clear() {
 export async function seedUsers() {
   const hasher = new BcryptHasher()
   await UserModel.create({
-    email: 'admin@example.com',
+    email: config.ADMIN_EMAIL,
     password: await hasher.passwordHash(config.ADMIN_PASSWORD),
     firstname: faker.name.firstName(),
     surname: faker.name.lastName(),
