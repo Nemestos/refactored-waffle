@@ -1,4 +1,4 @@
-import { Exclude, Expose } from 'class-transformer'
+import { Exclude, Expose, Type } from 'class-transformer'
 import { IsEmail, IsNotEmpty, IsOptional, IsString, Length } from 'class-validator'
 import { ApiObject } from '~/domain/base/api-object'
 import { Groups } from '~/domain/base/groups'
@@ -49,5 +49,6 @@ export default class User extends ApiObject<string> {
 
   @prop({ required: false, ref: () => Moto })
   @Expose({ groups: [Groups.READ] })
+  @Type(() => Moto)
   public motos?: Ref<Moto>[]
 }

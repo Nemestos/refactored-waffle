@@ -5,9 +5,7 @@ export function transform<T>(type: ClassConstructor<T>, body: T | T[], groups: s
   return Array.isArray(body)
     ? {
         object: 'list',
-        data: body.map((item) =>
-          plainToInstance(type, item, { groups, excludeExtraneousValues: true, enableImplicitConversion: false })
-        )
+        data: body.map((item) => plainToInstance(type, item, { groups, excludeExtraneousValues: true }))
       }
     : plainToInstance(type, body, { groups, excludeExtraneousValues: true, enableImplicitConversion: false })
 }

@@ -22,10 +22,10 @@ export default function UsersRouter(
     try {
       const users = await getAllUsersUseCase.execute()
       const transformedUsers = transform(User, users, [Groups.READ]) as ResponseStructureArray<User>
-      transformedUsers.data.forEach((user) => {
-        const transformedMoto = transform(Moto, user.motos, [Groups.READ]) as ResponseStructureArray<Moto>
-        user.motos = transformedMoto.data
-      })
+      // transformedUsers.data.forEach((user) => {
+      //   const transformedMoto = transform(Moto, user.motos, [Groups.READ]) as ResponseStructureArray<Moto>
+      //   user.motos = transformedMoto.data
+      // })
       return res.status(StatusCodes.OK).json(transformedUsers)
     } catch (error) {
       next(error)
