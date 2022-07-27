@@ -11,14 +11,17 @@ import { Jwt } from '~/domain/interfaces/jwt'
 import { ResponseStructureArray, ResponseStructureSingle } from '~/domain/types/response-structure'
 import { authMiddleware } from '~/presentation/middlewares/auth.middleware'
 import { transform } from '~/presentation/middlewares/response-wrapper.middleware'
+import { DeleteUserById } from '~/application/use-cases/user/delete-user-by-id'
 export default function UsersRouter(
   getAllUsersUseCase: GetAllUsersUseCase,
-  getUserByIdUserCase: GetUserByIdUseCase,
+  getUserByIdUseCase: GetUserByIdUseCase,
+  deleteUserByIdUseCase: DeleteUserById,
   jwtService: Jwt<any>
 ) {
   const router = express.Router()
-  const basicJwtMiddleware = authMiddleware(jwtService, [Scopes.CanGetUsers])
-  router.get('/', basicJwtMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+  const getUsersMiddleware = authMiddleware(jwtService, [Scopes.CanGetUsers])
+  const deleteUsersMiddleware = authMiddleware(jwtService, [Scopes.CanDeleteUsers])
+  router.get('/', getUsersMiddleware, async (req: Request, res: Response, next: NextFunction) => {
     try {
       const users = await getAllUsersUseCase.execute()
       const transformedUsers = transform(User, users, [Groups.READ]) as ResponseStructureArray<User>
@@ -28,17 +31,29 @@ export default function UsersRouter(
       next(error)
     }
   })
-
-  router.get('/:id', basicJwtMiddleware, async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+  router.get('/:id', getUsersMiddleware, async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     const id = req.params.id
     try {
-      const user = await getUserByIdUserCase.execute(id)
+      const user = await getUserByIdUseCase.execute(id)
       const transformedUser = transform(User, user, [Groups.READ]) as ResponseStructureSingle<User>
       return res.status(StatusCodes.OK).json(transformedUser)
     } catch (error) {
       next(error)
     }
   })
+  router.delete(
+    '/:id',
+    deleteUsersMiddleware,
+    async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+      const id = req.params.id
+      try {
+        await deleteUserByIdUseCase.execute(id)
+        return res.status(StatusCodes.OK).json({ message: "L'utilisateur à bien supprimé " })
+      } catch (error) {
+        next(error)
+      }
+    }
+  )
 
   return router
 }

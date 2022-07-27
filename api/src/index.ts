@@ -14,12 +14,18 @@ import { UserJwt } from '~/utils/user-jwt'
 import UsersRouter from '~/presentation/routers/user-router'
 import { GetUserById } from './application/use-cases/user/get-user-by-id'
 import { connectToMongo } from './infrastructure/providers/mongoose/connector'
+import { DeleteUserById } from './application/use-cases/user/delete-user-by-id'
 ;(async () => {
   await connectToMongo()
   const userRepo = new UserRepositoryImpl(new MongoUserDataSource())
   const passwordHasher = new BcryptHasher()
   const jwt = new UserJwt()
-  const userMiddleware = UsersRouter(new GetAllUsers(userRepo), new GetUserById(userRepo), jwt)
+  const userMiddleware = UsersRouter(
+    new GetAllUsers(userRepo),
+    new GetUserById(userRepo),
+    new DeleteUserById(userRepo),
+    jwt
+  )
   const authMiddleware = AuthRouter(new Signup(userRepo, passwordHasher), new Signin(userRepo, passwordHasher, jwt))
   server.use('/users', userMiddleware)
   server.use('/auth', authMiddleware)

@@ -1,14 +1,12 @@
 import { mongoose } from '@typegoose/typegoose'
-import { logger } from '@typegoose/typegoose/lib/logSettings'
-import GetUserByIdUseCase from '~/application/interfaces/uses-cases/user/get-user-by-id'
-import User from '~/domain/entities/user'
+import DeleteUserByIdUseCase from '~/application/interfaces/uses-cases/user/delete-user-by-id'
 import { ErrorCode } from '~/domain/errors/error-code'
 import { ErrorException } from '~/domain/errors/error-exception'
 import UserRepository from '~/infrastructure/interfaces/repositories/user-repository'
 
-export class GetUserById implements GetUserByIdUseCase {
+export class DeleteUserById implements DeleteUserByIdUseCase {
   constructor(private readonly userRepository: UserRepository) {}
-  async execute(id: string): Promise<User | null> {
+  async execute(id: string): Promise<void> {
     try {
       const isExist = await this.userRepository.userExist(id)
       if (!isExist) {
@@ -17,11 +15,8 @@ export class GetUserById implements GetUserByIdUseCase {
     } catch (err) {
       throw new ErrorException(ErrorCode.InvalidId, { id, resourceName: 'user' })
     }
-
     try {
-      const res = await this.userRepository.findUserById(id)
-
-      return res
+      await this.userRepository.deleteUserById(id)
     } catch (err) {
       if (err instanceof mongoose.Error.CastError) {
         throw new ErrorException(ErrorCode.NotFoundId, { id, resourceName: 'user' })

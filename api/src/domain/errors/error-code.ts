@@ -8,6 +8,7 @@ export class ErrorCode {
   public static readonly ValidationError = "Vous n'avez pas envoyé la bonne structure"
   public static readonly NotFound = 'Impossible de trouver la ressource demandée'
   public static readonly NotFoundId = 'Impossible de trouver la ressource demandée avec cet id là'
+  public static readonly InvalidId = "Cet id n'est pas correct"
   public static readonly DuplicateEntityError = 'Une entité unique de ce type existe deja'
   public static readonly AsyncError = 'Une erreur asynchrone vient de se produire'
   public static readonly UnknownError = 'Une erreur inconnue vient de se produire'
@@ -20,6 +21,7 @@ export const ErrorCodeStatus: Map<ErrorCode, StatusCodes> = new Map([
   [ErrorCode.ValidationError, StatusCodes.BAD_REQUEST],
   [ErrorCode.NotFound, StatusCodes.NOT_FOUND],
   [ErrorCode.NotFoundId, StatusCodes.NOT_FOUND],
+  [ErrorCode.InvalidId, StatusCodes.NOT_FOUND],
   [ErrorCode.AsyncError, StatusCodes.BAD_REQUEST],
   [ErrorCode.DuplicateEntityError, StatusCodes.CONFLICT],
   [ErrorCode.UnknownError, StatusCodes.INTERNAL_SERVER_ERROR]

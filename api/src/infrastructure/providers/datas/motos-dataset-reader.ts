@@ -1,8 +1,7 @@
 import { MotoCategory } from '~/domain/enums/moto-category'
 import * as path from 'path'
 import * as fs from 'fs'
-import { parse, Parser } from 'csv-parse'
-import { logger } from '~/utils/logger'
+import { parse } from 'csv-parse'
 export interface MotoDataset {
   company_name?: string
   model?: string
