@@ -23,7 +23,6 @@ export class GetUserById implements GetUserByIdUseCase {
 
       return res
     } catch (err) {
-      logger.info('dqdq')
       if (err instanceof mongoose.Error.CastError) {
         throw new ErrorException(ErrorCode.NotFoundId, { id, resourceName: 'user' })
       }
