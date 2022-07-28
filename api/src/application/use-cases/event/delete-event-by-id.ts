@@ -1,4 +1,3 @@
-import { mongoose } from '@typegoose/typegoose'
 import DeleteEventByIdUseCase from '~/application/interfaces/uses-cases/event/delete-event-by-id'
 import { ErrorCode } from '~/domain/errors/error-code'
 import { ErrorException } from '~/domain/errors/error-exception'
@@ -15,13 +14,7 @@ export class DeleteEventById implements DeleteEventByIdUseCase {
     } catch (err) {
       throw new ErrorException(ErrorCode.InvalidId, { id, resourceName: 'event' })
     }
-    try {
-      await this.eventRepository.deleteEventById(id)
-    } catch (err) {
-      if (err instanceof mongoose.Error.CastError) {
-        throw new ErrorException(ErrorCode.NotFoundId, { id, resourceName: 'event' })
-      }
-      throw err
-    }
+
+    await this.eventRepository.deleteEventById(id)
   }
 }

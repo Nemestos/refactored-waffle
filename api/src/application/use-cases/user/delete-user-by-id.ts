@@ -1,4 +1,3 @@
-import { mongoose } from '@typegoose/typegoose'
 import DeleteUserByIdUseCase from '~/application/interfaces/uses-cases/user/delete-user-by-id'
 import { ErrorCode } from '~/domain/errors/error-code'
 import { ErrorException } from '~/domain/errors/error-exception'

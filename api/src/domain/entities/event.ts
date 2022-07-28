@@ -5,18 +5,24 @@ import { prop, Ref } from '@typegoose/typegoose'
 import { MotoCategory } from '../enums/moto-category'
 import User from './user'
 import Participant from './participant'
-import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator'
+import { IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 @Exclude()
 export default class Event extends ApiObject<string> {
+  @prop({ required: true })
+  @Expose({ groups: Groups.basicAll() })
+  @IsString()
+  @IsOptional({ groups: [Groups.UPDATE] })
+  @IsNotEmpty({ groups: [Groups.CREATE] })
+  name: string
+
   @prop({ required: true, ref: () => User })
   @Expose({ groups: [Groups.READ] })
   @Type(() => User)
   owner: Ref<User>
 
   @prop({ required: true, type: Participant, default: [] })
-  @Expose({ groups: Groups.basicAll() })
-  @IsOptional({ groups: [Groups.UPDATE, Groups.CREATE] })
-  @IsNotEmpty({ groups: [Groups.CREATE] })
+  @Expose({ groups: [Groups.READ] })
+  // @ValidateNested({ each: true, groups: Groups.basicAll() })
   @Type(() => Participant)
   participants: Participant[]
 
@@ -31,4 +37,18 @@ export default class Event extends ApiObject<string> {
   @IsOptional({ groups: [Groups.UPDATE] })
   @IsNotEmpty({ groups: [Groups.CREATE] })
   category: MotoCategory
+
+  @prop({ required: true })
+  @Expose({ groups: Groups.basicAll() })
+  @IsDateString({}, { groups: Groups.basicAll() })
+  @IsOptional({ groups: [Groups.UPDATE] })
+  @IsNotEmpty({ groups: [Groups.CREATE] })
+  startDate: Date
+
+  @prop({ required: true })
+  @Expose({ groups: Groups.basicAll() })
+  @IsDateString({}, { groups: Groups.basicAll() })
+  @IsOptional({ groups: [Groups.UPDATE] })
+  @IsNotEmpty({ groups: [Groups.CREATE] })
+  endDate: Date
 }

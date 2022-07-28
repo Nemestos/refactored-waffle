@@ -1,4 +1,4 @@
-import { EventCreationDto } from '~/domain/dtos/event-dto'
+import { EventCreationDto, EventUpdateDto } from '~/domain/dtos/event-dto'
 import Event from '~/domain/entities/event'
 import { EventDataSource } from '~/infrastructure/interfaces/data-sources/event-ds'
 import { EventModel } from '../schemas/event-schema'
@@ -17,6 +17,11 @@ export class MongoEventDataSource implements EventDataSource {
   async create(event: EventCreationDto): Promise<boolean> {
     const newEvent = new EventModel({ ...event })
     const res = await newEvent.save()
+    return res !== null
+  }
+
+  async update(id: string, event: EventUpdateDto): Promise<boolean> {
+    const res = await EventModel.updateOne({ _id: id }, event)
     return res !== null
   }
 

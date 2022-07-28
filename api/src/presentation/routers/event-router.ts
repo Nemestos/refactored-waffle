@@ -5,8 +5,9 @@ import CreateEventUseCase from '~/application/interfaces/uses-cases/event/create
 import DeleteEventByIdUseCase from '~/application/interfaces/uses-cases/event/delete-event-by-id'
 import GetAllEventUseCase from '~/application/interfaces/uses-cases/event/get-all-event'
 import GetEventByIdUseCase from '~/application/interfaces/uses-cases/event/get-event-by-id'
+import UpdateEventUseCase from '~/application/interfaces/uses-cases/event/update-event'
 import { Groups } from '~/domain/base/groups'
-import { EventCreationDto } from '~/domain/dtos/event-dto'
+import { EventCreationDto, EventUpdateDto } from '~/domain/dtos/event-dto'
 import { UserJwtPayloadDto } from '~/domain/dtos/user-dto'
 import Event from '~/domain/entities/event'
 import { Scopes } from '~/domain/enums/scope-enum'
@@ -15,9 +16,10 @@ import { ResponseStructureArray, ResponseStructureSingle } from '~/domain/types/
 import { authMiddleware } from '~/presentation/middlewares/auth.middleware'
 import { transform } from '~/presentation/middlewares/response-wrapper.middleware'
 import { validateBody } from '../middlewares/validate-body.middleware'
+
 export default function EventsRouter(
   createEventUseCase: CreateEventUseCase,
-  // updateEventsUseCase: UpdateEvent,
+  updateEventsUseCase: UpdateEventUseCase,
   getAllEventsUseCase: GetAllEventUseCase,
   getEventById: GetEventByIdUseCase,
   deleteEventByIdUseCase: DeleteEventByIdUseCase,
@@ -38,7 +40,10 @@ export default function EventsRouter(
       try {
         await createEventUseCase.execute({
           owner: tokenData._id,
+          name: req.body.name,
           category: req.body.category,
+          startDate: req.body.startDate,
+          endDate: req.body.endDate,
           participants: req.body.participants
         } as EventCreationDto)
         res.statusCode = StatusCodes.CREATED
@@ -49,25 +54,23 @@ export default function EventsRouter(
     }
   )
 
-  // router.patch(
-  //   '/:id',
-  //   validateBody(Event, [Groups.UPDATE]),
-  //   updateEventsMiddleware,
-  //   async (req: Request, res: Response, next: NextFunction) => {
-  //     const tokenData = req.body.tokenData as UserJwtPayloadDto
-  //     try {
-  //       await createEventUseCase.execute({
-  //         owner: tokenData._id,
-  //         category: req.body.category,
-  //         participants: req.body.participants
-  //       } as EventCreationDto)
-  //       res.statusCode = StatusCodes.CREATED
-  //       res.json({ message: "L'event a bien été crée" })
-  //     } catch (err) {
-  //       next(err)
-  //     }
-  //   }
-  // )
+  router.patch(
+    '/:id',
+    validateBody(Event, [Groups.UPDATE]),
+    updateEventsMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+      const id = req.params.id
+      try {
+        await updateEventsUseCase.execute(id, {
+          ...req.body
+        } as EventUpdateDto)
+        res.statusCode = StatusCodes.OK
+        res.json({ message: "L'event a bien été mis à jour" })
+      } catch (err) {
+        next(err)
+      }
+    }
+  )
   router.get('/', getEventsMiddleware, async (req: Request, res: Response, next: NextFunction) => {
     try {
       const events = await getAllEventsUseCase.execute()

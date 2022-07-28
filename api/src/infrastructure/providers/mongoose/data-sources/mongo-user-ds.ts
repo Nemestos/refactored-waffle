@@ -1,3 +1,4 @@
+import { isValidObjectId } from 'mongoose'
 import { UserCreationDto, UserUpdateDto } from '~/domain/dtos/user-dto'
 import User from '~/domain/entities/user'
 import { UserDataSource } from '~/infrastructure/interfaces/data-sources/user-ds'
@@ -6,6 +7,10 @@ import { MotoModel } from '../schemas/moto-schema'
 
 export class MongoUserDataSource implements UserDataSource {
   async userExist(id: string): Promise<boolean> {
+    if (!isValidObjectId(id)) {
+      return Promise.resolve(false)
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const res = await UserModel.exists({ _id: id }).catch((_err) => null)
     return res != null

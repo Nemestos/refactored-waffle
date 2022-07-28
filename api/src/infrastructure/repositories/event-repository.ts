@@ -1,4 +1,4 @@
-import { EventCreationDto } from '~/domain/dtos/event-dto'
+import { EventCreationDto, EventUpdateDto } from '~/domain/dtos/event-dto'
 import Event from '~/domain/entities/event'
 import { EventDataSource } from '../interfaces/data-sources/event-ds'
 import EventRepository from '../interfaces/repositories/event-repository'
@@ -15,6 +15,10 @@ export class EventRepositoryImpl implements EventRepository {
 
   async createEvent(event: EventCreationDto): Promise<boolean> {
     return await this.eventDataSource.create(event)
+  }
+
+  async updateEvent(id: string, event: EventUpdateDto): Promise<boolean> {
+    return await this.eventDataSource.update(id, event)
   }
 
   async getEvents(): Promise<Event[]> {
