@@ -1,8 +1,7 @@
-import { UserCreationDto } from '~/domain/dtos/user-dto'
+import { UserCreationDto, UserUpdateDto } from '~/domain/dtos/user-dto'
 import User from '~/domain/entities/user'
 import { UserDataSource } from '~/infrastructure/interfaces/data-sources/user-ds'
 import { UserModel } from '~/infrastructure/providers/mongoose/schemas/user-schema'
-import { logger } from '~/utils/logger'
 import { MotoModel } from '../schemas/moto-schema'
 
 export class MongoUserDataSource implements UserDataSource {
@@ -19,6 +18,11 @@ export class MongoUserDataSource implements UserDataSource {
   async create(user: UserCreationDto): Promise<boolean> {
     const newUser = new UserModel({ ...user })
     const res = await newUser.save()
+    return res !== null
+  }
+
+  async update(id: string, user: UserUpdateDto): Promise<boolean> {
+    const res = await UserModel.updateOne({ _id: id }, user)
     return res !== null
   }
 

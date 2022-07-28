@@ -48,6 +48,7 @@ export default class User extends ApiObject<string> {
   public scopes: Scopes[]
 
   @prop({ required: false, ref: () => Moto })
+  @IsOptional({ groups: [Groups.UPDATE] })
   @Expose({ groups: [Groups.READ] })
   @Type(() => Moto)
   public motos?: Ref<Moto>[]

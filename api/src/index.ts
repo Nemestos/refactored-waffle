@@ -22,6 +22,7 @@ import { EventRepositoryImpl } from './infrastructure/repositories/event-reposit
 import { DeleteEventById } from './application/use-cases/event/delete-event-by-id'
 import { GetEventById } from './application/use-cases/event/get-event-by-id'
 import { CreateEvent } from './application/use-cases/event/create-event'
+import { UpdateUser } from './application/use-cases/user/update-user'
 ;(async () => {
   await connectToMongo()
   const userRepo = new UserRepositoryImpl(new MongoUserDataSource())
@@ -30,6 +31,7 @@ import { CreateEvent } from './application/use-cases/event/create-event'
   const jwt = new UserJwt()
   const userMiddleware = UsersRouter(
     new GetAllUsers(userRepo),
+    new UpdateUser(userRepo),
     new GetUserById(userRepo),
     new DeleteUserById(userRepo),
     jwt

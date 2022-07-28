@@ -9,9 +9,7 @@ import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator'
 @Exclude()
 export default class Event extends ApiObject<string> {
   @prop({ required: true, ref: () => User })
-  @Expose({ groups: Groups.basicAll() })
-  @IsOptional({ groups: [Groups.UPDATE] })
-  @IsNotEmpty({ groups: [Groups.CREATE] })
+  @Expose({ groups: [Groups.READ] })
   @Type(() => User)
   owner: Ref<User>
 

@@ -11,14 +11,19 @@ import { ResponseStructureArray, ResponseStructureSingle } from '~/domain/types/
 import { authMiddleware } from '~/presentation/middlewares/auth.middleware'
 import { transform } from '~/presentation/middlewares/response-wrapper.middleware'
 import { DeleteUserById } from '~/application/use-cases/user/delete-user-by-id'
+import UpdateUserUseCase from '~/application/interfaces/uses-cases/user/update-user'
+import { validateBody } from '../middlewares/validate-body.middleware'
+import { UserUpdateDto } from '~/domain/dtos/user-dto'
 export default function UsersRouter(
   getAllUsersUseCase: GetAllUsersUseCase,
+  updateUserUseCase: UpdateUserUseCase,
   getUserByIdUseCase: GetUserByIdUseCase,
   deleteUserByIdUseCase: DeleteUserById,
   jwtService: Jwt<any>
 ) {
   const router = express.Router()
   const getUsersMiddleware = authMiddleware(jwtService, [Scopes.CanGetUsers])
+  const updateUserMiddleware = authMiddleware(jwtService, [Scopes.CanUpdateUsers])
   const deleteUsersMiddleware = authMiddleware(jwtService, [Scopes.CanDeleteUsers])
   router.get('/', getUsersMiddleware, async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -30,6 +35,22 @@ export default function UsersRouter(
       next(error)
     }
   })
+
+  router.patch(
+    '/:id',
+    validateBody(User, [Groups.UPDATE]),
+    updateUserMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+      const id = req.params.id
+      try {
+        await updateUserUseCase.execute(id, req.body as UserUpdateDto)
+        res.statusCode = StatusCodes.OK
+        res.json({ message: "L'utilisateur a bien été mis à jour" })
+      } catch (err) {
+        next(err)
+      }
+    }
+  )
   router.get('/:id', getUsersMiddleware, async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     const id = req.params.id
     try {

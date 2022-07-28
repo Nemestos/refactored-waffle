@@ -1,5 +1,5 @@
-import Event from '~/domain/entities/event'
+import { EventCreationDto } from '~/domain/dtos/event-dto'
 
 export default interface CreateEventUseCase {
-  execute(event: Event): Promise<boolean>
+  execute(event: EventCreationDto): Promise<boolean>
 }

@@ -1,5 +1,3 @@
-import { mongoose } from '@typegoose/typegoose'
-import { logger } from '@typegoose/typegoose/lib/logSettings'
 import GetUserByIdUseCase from '~/application/interfaces/uses-cases/user/get-user-by-id'
 import User from '~/domain/entities/user'
 import { ErrorCode } from '~/domain/errors/error-code'
@@ -18,15 +16,8 @@ export class GetUserById implements GetUserByIdUseCase {
       throw new ErrorException(ErrorCode.InvalidId, { id, resourceName: 'user' })
     }
 
-    try {
-      const res = await this.userRepository.findUserById(id)
+    const res = await this.userRepository.findUserById(id)
 
-      return res
-    } catch (err) {
-      if (err instanceof mongoose.Error.CastError) {
-        throw new ErrorException(ErrorCode.NotFoundId, { id, resourceName: 'user' })
-      }
-      throw err
-    }
+    return res
   }
 }

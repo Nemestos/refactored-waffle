@@ -6,6 +6,8 @@ import DeleteEventByIdUseCase from '~/application/interfaces/uses-cases/event/de
 import GetAllEventUseCase from '~/application/interfaces/uses-cases/event/get-all-event'
 import GetEventByIdUseCase from '~/application/interfaces/uses-cases/event/get-event-by-id'
 import { Groups } from '~/domain/base/groups'
+import { EventCreationDto } from '~/domain/dtos/event-dto'
+import { UserJwtPayloadDto } from '~/domain/dtos/user-dto'
 import Event from '~/domain/entities/event'
 import { Scopes } from '~/domain/enums/scope-enum'
 import { Jwt } from '~/domain/interfaces/jwt'
@@ -15,24 +17,57 @@ import { transform } from '~/presentation/middlewares/response-wrapper.middlewar
 import { validateBody } from '../middlewares/validate-body.middleware'
 export default function EventsRouter(
   createEventUseCase: CreateEventUseCase,
+  // updateEventsUseCase: UpdateEvent,
   getAllEventsUseCase: GetAllEventUseCase,
   getEventById: GetEventByIdUseCase,
   deleteEventByIdUseCase: DeleteEventByIdUseCase,
   jwtService: Jwt<any>
 ) {
   const router = express.Router()
+  const createEventMiddleware = authMiddleware(jwtService, [Scopes.CanCreateEvents])
+  const updateEventsMiddleware = authMiddleware(jwtService, [Scopes.CanUpdateEvents])
   const getEventsMiddleware = authMiddleware(jwtService, [Scopes.CanGetEvents])
   const deleteEventsMiddleware = authMiddleware(jwtService, [Scopes.CanDeleteEvents])
 
-  router.post('/', validateBody(Event, [Groups.CREATE]), async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await createEventUseCase.execute(req.body as Event)
-      res.statusCode = StatusCodes.CREATED
-      res.json({ message: "L'event a bien été crée" })
-    } catch (err) {
-      next(err)
+  router.post(
+    '/',
+    validateBody(Event, [Groups.CREATE]),
+    createEventMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+      const tokenData = req.body.tokenData as UserJwtPayloadDto
+      try {
+        await createEventUseCase.execute({
+          owner: tokenData._id,
+          category: req.body.category,
+          participants: req.body.participants
+        } as EventCreationDto)
+        res.statusCode = StatusCodes.CREATED
+        res.json({ message: "L'event a bien été crée" })
+      } catch (err) {
+        next(err)
+      }
     }
-  })
+  )
+
+  // router.patch(
+  //   '/:id',
+  //   validateBody(Event, [Groups.UPDATE]),
+  //   updateEventsMiddleware,
+  //   async (req: Request, res: Response, next: NextFunction) => {
+  //     const tokenData = req.body.tokenData as UserJwtPayloadDto
+  //     try {
+  //       await createEventUseCase.execute({
+  //         owner: tokenData._id,
+  //         category: req.body.category,
+  //         participants: req.body.participants
+  //       } as EventCreationDto)
+  //       res.statusCode = StatusCodes.CREATED
+  //       res.json({ message: "L'event a bien été crée" })
+  //     } catch (err) {
+  //       next(err)
+  //     }
+  //   }
+  // )
   router.get('/', getEventsMiddleware, async (req: Request, res: Response, next: NextFunction) => {
     try {
       const events = await getAllEventsUseCase.execute()
