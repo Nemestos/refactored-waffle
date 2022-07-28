@@ -6,6 +6,7 @@ import User from '~/domain/entities/user'
  */
 export default interface UserRepository {
   createUser(user: UserCreationDto): Promise<boolean>
+  addMotoToUser(userId: string, motoId: string): void
   updateUser(id: string, user: UserUpdateDto): Promise<boolean>
   getUsers(): Promise<User[]>
   findUserByEmail(email: string): Promise<User | null>

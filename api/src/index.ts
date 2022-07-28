@@ -19,6 +19,7 @@ import { GetAllMotos } from './application/use-cases/moto/get-all-motos'
 import { GetMotoById } from './application/use-cases/moto/get-moto-by-id'
 import { GetMotosByManufacturer } from './application/use-cases/moto/get-motos-by-manufacturer'
 import { UpdateMoto } from './application/use-cases/moto/update-moto'
+import AddMotoToUser from './application/use-cases/user/add-moto-to-user'
 import { DeleteUserById } from './application/use-cases/user/delete-user-by-id'
 import { GetAllUsers } from './application/use-cases/user/get-all-users'
 import { GetUserById } from './application/use-cases/user/get-user-by-id'
@@ -41,6 +42,7 @@ import server from './server'
   const jwt = new UserJwt()
   const userMiddleware = UsersRouter(
     new GetAllUsers(userRepo),
+    new AddMotoToUser(userRepo, motoRepo),
     new UpdateUser(userRepo),
     new GetUserById(userRepo),
     new DeleteUserById(userRepo),

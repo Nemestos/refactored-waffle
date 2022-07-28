@@ -1,21 +1,23 @@
 import express, { NextFunction, Request, Response } from 'express'
 import 'express-async-errors'
 import { StatusCodes } from 'http-status-codes'
+import AddMotoToUserUseCase from '~/application/interfaces/uses-cases/user/add-moto-to-user'
 import GetAllUsersUseCase from '~/application/interfaces/uses-cases/user/get-all-users'
 import GetUserByIdUseCase from '~/application/interfaces/uses-cases/user/get-user-by-id'
+import UpdateUserUseCase from '~/application/interfaces/uses-cases/user/update-user'
+import { DeleteUserById } from '~/application/use-cases/user/delete-user-by-id'
 import { Groups } from '~/domain/base/groups'
+import { UserUpdateDto } from '~/domain/dtos/user-dto'
 import User from '~/domain/entities/user'
 import { Scopes } from '~/domain/enums/scope-enum'
 import { Jwt } from '~/domain/interfaces/jwt'
 import { ResponseStructureArray, ResponseStructureSingle } from '~/domain/types/response-structure'
 import { authMiddleware } from '~/presentation/middlewares/auth.middleware'
 import { transform } from '~/presentation/middlewares/response-wrapper.middleware'
-import { DeleteUserById } from '~/application/use-cases/user/delete-user-by-id'
-import UpdateUserUseCase from '~/application/interfaces/uses-cases/user/update-user'
 import { validateBody } from '../middlewares/validate-body.middleware'
-import { UserUpdateDto } from '~/domain/dtos/user-dto'
 export default function UsersRouter(
   getAllUsersUseCase: GetAllUsersUseCase,
+  addMotoToUserUseCase: AddMotoToUserUseCase,
   updateUserUseCase: UpdateUserUseCase,
   getUserByIdUseCase: GetUserByIdUseCase,
   deleteUserByIdUseCase: DeleteUserById,
@@ -35,6 +37,21 @@ export default function UsersRouter(
       next(error)
     }
   })
+
+  router.post(
+    '/:userId/motos/:motoId',
+    updateUserMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { userId, motoId } = req.params
+      try {
+        await addMotoToUserUseCase.execute(userId, motoId)
+
+        return res.json({ message: `La moto ${motoId} a bien été ajouté à ${userId}` })
+      } catch (error) {
+        next(error)
+      }
+    }
+  )
 
   router.patch(
     '/:id',

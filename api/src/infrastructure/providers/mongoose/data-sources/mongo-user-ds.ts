@@ -6,6 +6,15 @@ import { UserModel } from '~/infrastructure/providers/mongoose/schemas/user-sche
 import { MotoModel } from '../schemas/moto-schema'
 
 export class MongoUserDataSource implements UserDataSource {
+  async addMoto(userId: string, motoId: string): Promise<void> {
+    const user = await UserModel.findById(userId).exec()
+    if (!user) {
+      return
+    }
+    user.motos?.push(motoId)
+    user.save()
+  }
+
   async userExist(id: string): Promise<boolean> {
     if (!isValidObjectId(id)) {
       return Promise.resolve(false)

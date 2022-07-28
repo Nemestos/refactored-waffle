@@ -10,6 +10,10 @@ export class UserRepositoryImpl implements UserRepository {
     this.userDataSource = userDataSource
   }
 
+  async addMotoToUser(userId: string, motoId: string): Promise<void> {
+    await this.userDataSource.addMoto(userId, motoId)
+  }
+
   async userExist(id: string): Promise<boolean> {
     return await this.userDataSource.userExist(id)
   }
