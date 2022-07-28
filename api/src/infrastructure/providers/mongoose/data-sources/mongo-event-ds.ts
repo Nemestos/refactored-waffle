@@ -26,7 +26,7 @@ export class MongoEventDataSource implements EventDataSource {
   }
 
   async getById(id: string): Promise<Event | null> {
-    const res = await EventModel.findById(id).populate({ path: 'owner', model: EventModel }).lean().exec()
+    const res = await EventModel.findById(id).populate({ path: 'owner', model: UserModel }).lean().exec()
     return res
   }
 }

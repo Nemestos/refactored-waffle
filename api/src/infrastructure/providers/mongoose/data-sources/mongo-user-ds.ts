@@ -2,11 +2,13 @@ import { UserCreationDto } from '~/domain/dtos/user-dto'
 import User from '~/domain/entities/user'
 import { UserDataSource } from '~/infrastructure/interfaces/data-sources/user-ds'
 import { UserModel } from '~/infrastructure/providers/mongoose/schemas/user-schema'
+import { logger } from '~/utils/logger'
 import { MotoModel } from '../schemas/moto-schema'
 
 export class MongoUserDataSource implements UserDataSource {
   async userExist(id: string): Promise<boolean> {
-    const res = await UserModel.exists({ _id: id })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const res = await UserModel.exists({ _id: id }).catch((_err) => null)
     return res != null
   }
 

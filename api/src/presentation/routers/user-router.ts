@@ -5,7 +5,6 @@ import GetAllUsersUseCase from '~/application/interfaces/uses-cases/user/get-all
 import GetUserByIdUseCase from '~/application/interfaces/uses-cases/user/get-user-by-id'
 import { Groups } from '~/domain/base/groups'
 import User from '~/domain/entities/user'
-import Moto from '~/domain/entities/moto'
 import { Scopes } from '~/domain/enums/scope-enum'
 import { Jwt } from '~/domain/interfaces/jwt'
 import { ResponseStructureArray, ResponseStructureSingle } from '~/domain/types/response-structure'
