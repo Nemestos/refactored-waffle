@@ -25,8 +25,8 @@ export default function UsersRouter(
 ) {
   const router = express.Router()
   const getUsersMiddleware = authMiddleware(jwtService, [Scopes.CanGetUsers])
-  const updateUserMiddleware = authMiddleware(jwtService, [Scopes.CanUpdateUsers])
-  const deleteUsersMiddleware = authMiddleware(jwtService, [Scopes.CanDeleteUsers])
+  const updateUserMiddleware = authMiddleware(jwtService, [Scopes.CanUpdateUsers], true)
+  const deleteUsersMiddleware = authMiddleware(jwtService, [Scopes.CanDeleteUsers], true)
   router.get('/', getUsersMiddleware, async (req: Request, res: Response, next: NextFunction) => {
     try {
       const users = await getAllUsersUseCase.execute()

@@ -6,7 +6,18 @@ import { ErrorCode } from '~/domain/errors/error-code'
 import { ErrorException } from '~/domain/errors/error-exception'
 import { Jwt } from '~/domain/interfaces/jwt'
 
-export const authMiddleware = (jwtService: Jwt<UserJwtPayloadDto>, scopes: Scopes[] = []) => {
+const handleAuthorizationId = (resourceId: string, userId: string) => {
+  return resourceId === userId
+}
+const handleAuthorizationScopes = (requiredScopes: Scopes[] = [], userScopes: Scopes[] = []) => {
+  return requiredScopes.every((scope) => userScopes.includes(scope))
+}
+
+export const authMiddleware = (
+  jwtService: Jwt<UserJwtPayloadDto>,
+  scopes: Scopes[] = [],
+  withAuthorizationId = false
+) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const auth = req.headers.authorization
     if (!auth && !auth?.startsWith('Bearer')) {
@@ -16,8 +27,12 @@ export const authMiddleware = (jwtService: Jwt<UserJwtPayloadDto>, scopes: Scope
     const token = auth.replace('Bearer ', '')
     try {
       const tokenData = jwtService.verifyToken(token)
-      if (!scopes.every((scope) => tokenData.scopes.includes(scope))) {
-        throw new ErrorException(ErrorCode.UnauthorizeError, { required_scopes: scopes, your_scopes: tokenData.scopes })
+
+      const canAccessWithId = !withAuthorizationId || handleAuthorizationId(req.params.id, tokenData._id || '')
+      const canAccessWithScopes = handleAuthorizationScopes(scopes, tokenData.scopes)
+      console.log(canAccessWithId, canAccessWithScopes)
+      if (!canAccessWithScopes && !canAccessWithId) {
+        throw new ErrorException(ErrorCode.UnauthorizeError)
       }
       req.body.tokenData = tokenData
       next()
