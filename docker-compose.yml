@@ -8,7 +8,7 @@ services:
       - "${MONGODB_PORT}:${MONGODB_PORT}"
     volumes:
       - "./database:/data/db"
-    command: --quiet
+    command: mongod --quiet --logpath /dev/null
 
     networks:
       - db
@@ -31,6 +31,25 @@ services:
     networks:
       - frontend
       - db
+
+  front:
+    build:
+      dockerfile: services/front/Dockerfile
+      context: .
+      target: deps
+    volumes:
+      - ./front:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: always
+    ports:
+      - "${FRONT_PORT}:${FRONT_PORT}"
+    depends_on:
+      - api
+    command: yarn dev
+    env_file:
+      - .env
+    networks:
+      - frontend
 
   # next:
   #   restart: always
