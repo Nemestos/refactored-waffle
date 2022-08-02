@@ -1,15 +1,14 @@
+import { prop } from '@typegoose/typegoose'
 import { Exclude, Expose } from 'class-transformer'
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 import { ApiObject } from '~/domain/base/api-object'
 import { Groups } from '~/domain/base/groups'
-import { prop } from '@typegoose/typegoose'
 import { MotoCategory } from '../enums/moto-category'
 @Exclude()
 export default class Moto extends ApiObject<string> {
   @prop()
   @Expose({ groups: Groups.basicAll() })
-  @IsOptional({ groups: [Groups.UPDATE] })
-  @IsNotEmpty({ groups: [Groups.CREATE] })
+  @IsOptional({ groups: [Groups.UPDATE, Groups.CREATE] })
   @IsString({ groups: [Groups.CREATE, Groups.UPDATE] })
   name: string
 
@@ -29,5 +28,10 @@ export default class Moto extends ApiObject<string> {
 
   @prop({ required: false, type: String, enum: MotoCategory })
   @Expose({ groups: Groups.basicAll() })
+  @IsEnum(MotoCategory, {
+    groups: Groups.basicAll()
+  })
+  @IsOptional({ groups: [Groups.UPDATE] })
+  @IsNotEmpty({ groups: [Groups.CREATE] })
   category: MotoCategory
 }

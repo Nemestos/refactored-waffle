@@ -1,12 +1,27 @@
-import { UserCreationDto } from '~/domain/dtos/user-dto'
+import { isValidObjectId } from 'mongoose'
+import { UserCreationDto, UserUpdateDto } from '~/domain/dtos/user-dto'
 import User from '~/domain/entities/user'
 import { UserDataSource } from '~/infrastructure/interfaces/data-sources/user-ds'
 import { UserModel } from '~/infrastructure/providers/mongoose/schemas/user-schema'
 import { MotoModel } from '../schemas/moto-schema'
 
 export class MongoUserDataSource implements UserDataSource {
+  async addMoto(userId: string, motoId: string): Promise<void> {
+    const user = await UserModel.findById(userId).exec()
+    if (!user) {
+      return
+    }
+    user.motos?.push(motoId)
+    user.save()
+  }
+
   async userExist(id: string): Promise<boolean> {
-    const res = await UserModel.exists({ _id: id })
+    if (!isValidObjectId(id)) {
+      return Promise.resolve(false)
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const res = await UserModel.exists({ _id: id }).catch((_err) => null)
     return res != null
   }
 
@@ -17,6 +32,11 @@ export class MongoUserDataSource implements UserDataSource {
   async create(user: UserCreationDto): Promise<boolean> {
     const newUser = new UserModel({ ...user })
     const res = await newUser.save()
+    return res !== null
+  }
+
+  async update(id: string, user: UserUpdateDto): Promise<boolean> {
+    const res = await UserModel.updateOne({ _id: id }, user)
     return res !== null
   }
 

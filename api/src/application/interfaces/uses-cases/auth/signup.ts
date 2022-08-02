@@ -1,5 +1,5 @@
-import User from '~/domain/entities/user'
+import { UserCreationDto } from '~/domain/dtos/user-dto'
 
 export default interface SignupUseCase {
-  execute(use: User): Promise<boolean>
+  execute(user: UserCreationDto): Promise<boolean>
 }

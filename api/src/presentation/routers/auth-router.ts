@@ -4,7 +4,7 @@ import SignupUseCase from '~/application/interfaces/uses-cases/auth/signup'
 import User from '~/domain/entities/user'
 import 'express-async-errors'
 import SigninUseCase from '~/application/interfaces/uses-cases/auth/signin'
-import { UserSigninDto } from '~/domain/dtos/user-dto'
+import { UserCreationDto, UserSigninDto } from '~/domain/dtos/user-dto'
 import { validateBody } from '~/presentation/middlewares/validate-body.middleware'
 import { Groups } from '~/domain/base/groups'
 
@@ -21,7 +21,7 @@ export default function AuthRouter(signupUseCase: SignupUseCase, signinUseCase: 
     validateBody(User, [Groups.CREATE]),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        await signupUseCase.execute(req.body as User)
+        await signupUseCase.execute(req.body as UserCreationDto)
         res.statusCode = StatusCodes.CREATED
         res.json({ message: "L'utilisateur a bien été crée" })
       } catch (err) {

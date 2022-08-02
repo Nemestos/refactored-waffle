@@ -1,4 +1,4 @@
-import { EventCreationDto } from '~/domain/dtos/event-dto'
+import { EventCreationDto, EventUpdateDto } from '~/domain/dtos/event-dto'
 import Event from '~/domain/entities/event'
 
 /**
@@ -6,6 +6,7 @@ import Event from '~/domain/entities/event'
  */
 export default interface EventRepository {
   createEvent(event: EventCreationDto): Promise<boolean>
+  updateEvent(id: string, event: EventUpdateDto): Promise<boolean>
   getEvents(): Promise<Event[]>
   findEventById(id: string): Promise<Event | null>
   deleteEventById(id: string): Promise<void>
