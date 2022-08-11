@@ -2,7 +2,7 @@ import dynamic from "next/dynamic"
 import styled from "styled-components"
 import Form from "../components/logInForm";
 
-const BackgroundImage = dynamic(() => import("../components/backgroundImage"), {
+const BackgroundImage = dynamic(() => import("../components/Wrapper"), {
     ssr: false,
   });
   

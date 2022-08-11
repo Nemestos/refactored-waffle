@@ -1,49 +1,96 @@
 import dynamic from "next/dynamic"
 import styled from "styled-components"
+import HomeInfo from "../components/HomeInfo";
+import LoginForm from "../components/logInForm";
 import Form from "../components/logInForm";
+import Wrapper from "../components/Wrapper";
 
-const Wrapper = dynamic(() => import("../components/backgroundImage"), {
-    ssr: false,
-  });
-  
-  // const Wrapper = styled.div`
-  //   width: 100%;
-  //   height: 100%;
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   justify-content: center;
-  //   align-items: center;
-  //   display: flex;
-  // `;
+// const Wrapper = dynamic(() => import("../components/wrapper"), {
+//     ssr: false,
+//   });
 
-  const Rect = styled.div`
+// const ElemsWrapper = styled.div`
+//   width: 100%;
+//   height: 100%;
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   justify-content: center;
+//   align-items: center;
+//   display: flex;
+// `;
+
+const Rect = styled.div`
     height: 80px;
     width: 80px;
     background-color:red;
   `;
 
-  const LoginContainer = styled.div`
+const LoginContainer = styled.div`
     display: flex;
+    height: 100%;
+    width: 100%;
     align-items: center;
+    justify-content: center;
     flex-direction: column;
-    hight: 70vh;
-    width: 30vw;
-    background: rgba(255, 255, 255, 0.15);
+    
+    background-color: rgba(255, 255, 255, 0.15);
     border-radius: 5px;
     `;
 
+const Container = styled.div`
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    `;
+
+const Header = styled.div`
+  height: 5rem;
+  margin-top: 3rem;
+  text-align: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: bolder;
+`;
+
+const HorizonLine = styled.hr`
+  width: 90%;
+  height:2px;
+  background-color: white;
+  border: none;
+  padding-top: -10px;
+`
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-around;
+  padding: 100px
+`;
+
+
+
 export default function LogInPage() {
-    return(
-      <Wrapper id="wrapper">
+  return (
+    <Wrapper>
+
+      <Container id="Conatiner">
+        <Header> W M C </Header>
+        <HorizonLine />
     
-    <p>Hello</p>
-      
-      {/* <LoginContainer id="login">
-      <Form />
+        
+        <Content id="Content">
+          <HomeInfo />
+          
+          <LoginForm/>
+        </Content>
 
+        {/* <LoginContainer id="login-container">
+        <Form />
       </LoginContainer> */}
-
-      </Wrapper>
+      </Container>
+    </Wrapper>
   );
 }

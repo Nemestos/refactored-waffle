@@ -1,11 +1,14 @@
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { ComponentProps, PropsWithChildren, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import backgroundImage from '../../pictureAssets/BackGround/background.jpg'
 
 const Box = styled.div`
   position: fixed;
   top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
 `;
 
 function getWindowDimensions() {
@@ -16,7 +19,8 @@ function getWindowDimensions() {
   };
 }
 
-const BackgroundImage: React.PropsWithChildren = (props) => {
+const Wrapper: React.FunctionComponent<any> = (props) => {
+
   const [width, setWidth] = useState<number>();
   const [height, setheight] = useState<number>();
 
@@ -43,13 +47,17 @@ const BackgroundImage: React.PropsWithChildren = (props) => {
 
   if (width && height) {
     return (
-      <Box id="background">
+      <Box id="wrapper">
         <Image
+          className="background"
+          id="background-image"
           src={backgroundImage}
           width={width}
           height={height}
+          layout="fill"
+          style={{zIndex: -1}}
         />
-        { props.children}
+        {props.children}
       </Box>
     );
   }
@@ -57,4 +65,4 @@ const BackgroundImage: React.PropsWithChildren = (props) => {
   return null;
 }
 
-export default BackgroundImage;
+export default Wrapper;
