@@ -1,10 +1,8 @@
-import { render } from 'react-dom'
 import styled from 'styled-components'
 
-const LoginForm = styled.form`
-    background-color: white;
+const Form = styled.form`
     padding: auto;
-    border-radius: 8px;
+    border-radius: 5px;
     `;
 
 const InputLogin = styled.input`
@@ -16,20 +14,22 @@ const InputLogin = styled.input`
 
 const Button = styled.button`
     border-raius: 8px;
-    color: red;
+    background-color: red;
     padding: center;
     `;
 
 function ExampleForm() {
     return (
-        <LoginForm>
+        <Form>
+            <h2> Welcome Back Biker</h2>
             <InputLogin placeholder="username" type="email" />
             <br />
             <InputLogin placeholder="password" type="password" />
             <br />
-            <Button>Sign In</Button>
-        </LoginForm>
+            <Button>Log In</Button>
+        </Form>
     )
 }
 
+export default ExampleForm;
 

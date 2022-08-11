@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic"
 import styled from "styled-components"
+import Form from "../components/logInForm";
 
 const BackgroundImage = dynamic(() => import("../components/backgroundImage"), {
     ssr: false,
@@ -15,13 +16,20 @@ const BackgroundImage = dynamic(() => import("../components/backgroundImage"), {
     display: flex;
   `;
 
+  const Input = styled.div`
+    background-colo
+  `
+  
+
 export default function WelcomePage() {
     return(
     <>
       <Wrapper>
-       
+        <Form />
       </Wrapper>
+
       <BackgroundImage />
+      
     </>
   );
 }

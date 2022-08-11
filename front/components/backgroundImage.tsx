@@ -5,7 +5,6 @@ import backgroundImage from '../../pictureAssets/BackGround/background.jpg'
 
 const Box = styled.div`
   position: fixed;
-  z-index: 0;
   top: 0;
 `;
 
@@ -17,7 +16,7 @@ function getWindowDimensions() {
   };
 }
 
-function BackgroundImage() {
+const BackgroundImage: React.PropsWithChildren = (props) => {
   const [width, setWidth] = useState<number>();
   const [height, setheight] = useState<number>();
 
@@ -44,12 +43,13 @@ function BackgroundImage() {
 
   if (width && height) {
     return (
-      <Box>
+      <Box id="background">
         <Image
           src={backgroundImage}
           width={width}
           height={height}
         />
+        { props.children}
       </Box>
     );
   }
