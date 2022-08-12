@@ -21,6 +21,7 @@
         "peerDependencies": true
       }
     ],
+    "no-unneeded-ternary": "off",
     "no-useless-constructor": "off",
     "no-use-before-define": 1,
     "@typescript-eslint/explicit-function-return-type": 0,
