@@ -1,6 +1,11 @@
-import styled from 'styled-components'
-import BackGround from '../components/Background'
-function WelcomePage() {
+import dynamic from "next/dynamic"
+import styled from "styled-components"
+import Form from "../components/logInForm";
+
+const BackgroundImage = dynamic(() => import("../components/Wrapper"), {
+    ssr: false,
+  });
+  
   const Wrapper = styled.div`
     z-index: 1;
     width: 100%;
@@ -9,9 +14,22 @@ function WelcomePage() {
     justify-content: center;
     align-items: center;
     display: flex;
+  `;
+
+  const Input = styled.div`
+    background-colo
   `
+  
 
-  return <BackGround sourceFile="lien de limage " />
+export default function WelcomePage() {
+    return(
+    <>
+      <Wrapper>
+        <Form />
+      </Wrapper>
+
+      <BackgroundImage />
+      
+    </>
+  );
 }
-
-export default WelcomePage

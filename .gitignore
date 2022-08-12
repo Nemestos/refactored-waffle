@@ -106,7 +106,7 @@ dist
 
 .idea/
 api/yarn.lock
-
+front/yarn.lock
 #SSL Certificate
 cert.pem
 chain.pem
