@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
 const Form = styled.form`
-    width: 395px;
-    height: 355px;
+    width: 480px;
+    height: 555px;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -30,7 +30,7 @@ const TitleWrapper = styled.div`
     padding-top: 10px;
     
 `
-const InputLoginWrapper = styled.div`
+const InputSignupWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -47,7 +47,7 @@ const InputLogin = styled.input`
     background-color: white;
 `;
 
-const H4Login = styled.h4`
+const H4Signup = styled.h4`
     color: white;
     font-weight: 100;
     font-style: italic;
@@ -58,7 +58,7 @@ const H4Login = styled.h4`
 
 const Button = styled.button`
     border-radius: 8px;
-    padding: 20px;
+    
     font-size: 30px;
     font-weight: bold;
     font-family: sans-serif;
@@ -69,25 +69,33 @@ const Button = styled.button`
     text-shadow: 0px 4px 3px #463e3e,
              0px 8px 13px #cacaca18,
              0px 18px 23px #b9b9b91d;
+    padding-top: 25px;
     `;
 
-function LoginForm() {
+function SignupForm() {
     return (
         <Form>
             <TitleWrapper>
-            <TitleHello> Welcome Back </TitleHello> <TitleBiker> Biker</TitleBiker>
+            <TitleHello> Hello </TitleHello> <TitleBiker> Biker</TitleBiker>
             </TitleWrapper>
             
-            <InputLoginWrapper>
-            <H4Login>Username</H4Login>
+            <InputSignupWrapper>
+            < H4Signup>Username</ H4Signup>
             <InputLogin type="email" />
-                  
-            <H4Login>Password</H4Login>
+
+            < H4Signup>Email</ H4Signup>
+            <InputLogin type="email" />
+           
+            < H4Signup>Password</ H4Signup>
             <InputLogin type="password" />
-            </InputLoginWrapper>
-            <Button>Log In</Button>
+
+            < H4Signup>Confirm Password</ H4Signup>
+            <InputLogin type="password" />
+            </InputSignupWrapper>
+            
+            <Button>Confirm</Button>
         </Form>
     )
 }
 
-export default LoginForm;
+export default SignupForm;

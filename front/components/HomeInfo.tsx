@@ -7,20 +7,21 @@ const Box = styled.div`
 `;
 const Title = styled.h2`
     color: white;
-    font-size: 50px;
+    font-size: 55px;
+    font-style: italic;
 `;
 
 const Info = styled.div`
     color: white;
     font-weight: 100;
     font-size: 18px;
-    height: 200px;
+    height: 150px;
     width: 400px;
 `;
 
 const ButtonInfo = styled.button`
     height: 60px;
-    width: 150px;
+    width: 170px;
     font-size: 20px;
     font-weight: bold;
     font-family: sans-serif;
@@ -40,7 +41,7 @@ const HomeInfo: React.FunctionComponent = () =>
         It’s never been easier to create your motocycle racing event for any motocycle categories in few clicks 
         and attemp to win the chapionship. 
         </Info>
-        <ButtonInfo>Sign Up</ButtonInfo>
+        <ButtonInfo>Let's start</ButtonInfo>
     </Box>
 
 
