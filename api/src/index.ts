@@ -8,6 +8,7 @@ import UsersRouter from '~/presentation/routers/user-router'
 import { BcryptHasher } from '~/utils/bcrypt-hasher'
 import { logger } from '~/utils/logger'
 import { UserJwt } from '~/utils/user-jwt'
+import { Refresh } from './application/use-cases/auth/refresh'
 import { CreateEvent } from './application/use-cases/event/create-event'
 import { DeleteEventById } from './application/use-cases/event/delete-event-by-id'
 import { GetAllEvents } from './application/use-cases/event/get-all-events'
@@ -33,13 +34,16 @@ import { MotoRepositoryImpl } from './infrastructure/repositories/moto-repositor
 import EventsRouter from './presentation/routers/event-router'
 import MotosRouter from './presentation/routers/moto-router'
 import server from './server'
+import { client } from './utils/cache'
 ;(async () => {
   await connectToMongo()
+  await client.connect()
   const userRepo = new UserRepositoryImpl(new MongoUserDataSource())
   const eventRepo = new EventRepositoryImpl(new MongoEventDataSource())
   const motoRepo = new MotoRepositoryImpl(new MongoMotoDataSource())
   const passwordHasher = new BcryptHasher()
   const jwt = new UserJwt()
+  jwt.loadOrInitRefreshList()
   const userMiddleware = UsersRouter(
     new GetAllUsers(userRepo),
     new AddMotoToUser(userRepo, motoRepo),
@@ -66,7 +70,11 @@ import server from './server'
     new DeleteMotoById(motoRepo),
     jwt
   )
-  const authMiddleware = AuthRouter(new Signup(userRepo, passwordHasher), new Signin(userRepo, passwordHasher, jwt))
+  const authMiddleware = AuthRouter(
+    new Signup(userRepo, passwordHasher),
+    new Signin(userRepo, passwordHasher, jwt),
+    new Refresh(userRepo, jwt)
+  )
   server.use('/auth', authMiddleware)
   server.use('/users', userMiddleware)
   server.use('/events', eventsMiddleware)

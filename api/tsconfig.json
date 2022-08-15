@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "ESNext",
-    "module": "CommonJS",
+    "target": "ES2017",
     "lib": ["esnext", "DOM.Iterable"],
     "moduleResolution": "node",
     "esModuleInterop": true,

@@ -28,9 +28,8 @@ export const authMiddleware = (
     try {
       const tokenData = jwtService.verifyToken(token)
 
-      const canAccessWithId = !withAuthorizationId || handleAuthorizationId(req.params.id, tokenData._id || '')
-      const canAccessWithScopes = handleAuthorizationScopes(scopes, tokenData.scopes)
-      console.log(canAccessWithId, canAccessWithScopes)
+      const canAccessWithId = !withAuthorizationId || handleAuthorizationId(req.params.id, tokenData?._id || '')
+      const canAccessWithScopes = handleAuthorizationScopes(scopes, tokenData?.scopes)
       if (!canAccessWithScopes && !canAccessWithId) {
         throw new ErrorException(ErrorCode.UnauthorizeError)
       }

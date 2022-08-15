@@ -114,6 +114,7 @@ fullchain.pem
 privkey.pem
 
 database/
+cache/
 .DS_Store
 
 .env

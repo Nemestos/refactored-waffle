@@ -6,5 +6,7 @@ export const config = {
   JWT_KEY: process.env.JWT_KEY || 'key',
   DB_PORT: process.env.MONGODB_PORT || 27017,
   DB_HOST: process.env.MONGODB_HOST || 'localhost',
-  DB: process.env.MONGODB_DB || 'db'
+  DB: process.env.MONGODB_DB || 'db',
+  CACHE_HOST: process.env.REDIS_HOST || 'redis',
+  CACHE_PORT: process.env.REDIS_PORT || 6379
 }
