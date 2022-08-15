@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
 const Form = styled.form`
-  width: 495px;
-  height: 395px;
+  width: 395px;
+  height: 355px;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
@@ -26,7 +26,7 @@ const TitleWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  padding-top: 20px;
+  padding-top: 10px;
 `
 const InputLoginWrapper = styled.div`
   display: flex;
@@ -36,11 +36,21 @@ const InputLoginWrapper = styled.div`
 
 const InputLogin = styled.input`
   font-size: 20px;
-  padding: 10px;
-  margin: auto;
+  width: 370px;
+  height: 55px;
+  padding: 5px;
   border-radius: 8px;
   border: none;
   background-color: white;
+`
+
+const H4Login = styled.h4`
+  color: white;
+  font-weight: 100;
+  font-style: italic;
+  padding-bottom: 2px;
+  margin-bottom: 2px;
+  margin-top: 20px;
 `
 
 const Button = styled.button`
@@ -64,13 +74,11 @@ function LoginForm() {
       </TitleWrapper>
 
       <InputLoginWrapper>
-        <h4>Username</h4>
-        <InputLogin placeholder="username" type="email" />
-      </InputLoginWrapper>
-      <br />
-      <InputLoginWrapper>
-        <h4>Password</h4>
-        <InputLogin placeholder="password" type="password" />
+        <H4Login>Username</H4Login>
+        <InputLogin type="email" />
+
+        <H4Login>Password</H4Login>
+        <InputLogin type="password" />
       </InputLoginWrapper>
       <Button>Log In</Button>
     </Form>
