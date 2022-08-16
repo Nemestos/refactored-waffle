@@ -1,19 +1,18 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Header } from './Header'
 
+export interface BackgroundProps {
+  imageSrc: string
+}
 const Box = styled.div`
-  display: flex;
-  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
   height: 100%;
   width: 100%;
 `
-const Main = styled.main`
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-`
+
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window
   return {
@@ -21,8 +20,7 @@ function getWindowDimensions() {
     height
   }
 }
-
-const Wrapper: React.FunctionComponent<any> = (props) => {
+export function Background({ imageSrc }: BackgroundProps) {
   const [width, setWidth] = useState<number>()
   const [height, setheight] = useState<number>()
 
@@ -48,24 +46,9 @@ const Wrapper: React.FunctionComponent<any> = (props) => {
   }, [])
 
   if (width && height) {
-    return (
-      <Box id="wrapper">
-        <Header />
-        <Image
-          className="background"
-          id="background-image"
-          src="/BackGround/background.jpg"
-          width={width}
-          height={height}
-          layout="fill"
-          style={{ zIndex: -1 }}
-        />
-        <Main>{props.children}</Main>
-      </Box>
-    )
+    return <Image src={imageSrc} width={width} height={height} layout="fill" style={{ zIndex: -1 }} />
   }
 
   return null
 }
-
-export default Wrapper
+export default Background

@@ -1,8 +1,10 @@
+import dynamic from 'next/dynamic'
 import styled from 'styled-components'
-import HomeInfo from '../components/HomeInfo'
 import LoginForm from '../components/logInForm'
-import Wrapper from '../components/Wrapper'
 
+const Template = dynamic(() => import('../components/Wrapper'), {
+  ssr: false
+})
 // const Wrapper = dynamic(() => import("../components/wrapper"), {
 //     ssr: false,
 //   });
@@ -61,21 +63,14 @@ const Content = styled.div`
 
 export default function LogInPage() {
   return (
-    <Wrapper>
-      <Container id="Conatiner">
-        <Header> W M C </Header>
-        <HorizonLine />
-
-        <Content id="Content">
-          <HomeInfo />
-
-          <LoginForm />
-        </Content>
-
-        {/* <LoginContainer id="login-container">
-        <Form />
-      </LoginContainer> */}
-      </Container>
-    </Wrapper>
+    <>
+      <Template>
+        <Container id="Conatiner">
+          <Content id="Content">
+            <LoginForm />
+          </Content>
+        </Container>
+      </Template>
+    </>
   )
 }
