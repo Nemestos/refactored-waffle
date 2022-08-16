@@ -21,6 +21,8 @@
         "peerDependencies": true
       }
     ],
+    "n/no-callback-literal": 0,
+
     "no-unneeded-ternary": "off",
     "no-useless-constructor": "off",
     "no-use-before-define": 1,

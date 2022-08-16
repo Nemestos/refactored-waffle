@@ -73,7 +73,9 @@ import { client } from './utils/cache'
   const authMiddleware = AuthRouter(
     new Signup(userRepo, passwordHasher),
     new Signin(userRepo, passwordHasher, jwt),
-    new Refresh(userRepo, jwt)
+    new Refresh(userRepo, jwt),
+    new GetUserById(userRepo),
+    jwt
   )
   server.use('/auth', authMiddleware)
   server.use('/users', userMiddleware)

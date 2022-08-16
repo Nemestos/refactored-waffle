@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { Header } from './Header'
 const Box = styled.div`
   position: fixed;
   top: 0;
@@ -45,6 +46,7 @@ const Wrapper: React.FunctionComponent<any> = (props) => {
   if (width && height) {
     return (
       <Box id="wrapper">
+        <Header />
         <Image
           className="background"
           id="background-image"
