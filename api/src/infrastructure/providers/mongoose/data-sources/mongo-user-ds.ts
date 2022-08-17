@@ -29,10 +29,10 @@ export class MongoUserDataSource implements UserDataSource {
     await UserModel.deleteOne({ _id: id })
   }
 
-  async create(user: UserCreationDto): Promise<boolean> {
+  async create(user: UserCreationDto): Promise<User> {
     const newUser = new UserModel({ ...user })
     const res = await newUser.save()
-    return res !== null
+    return res.toObject()
   }
 
   async update(id: string, user: UserUpdateDto): Promise<boolean> {

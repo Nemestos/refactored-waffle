@@ -26,7 +26,7 @@ export class UserRepositoryImpl implements UserRepository {
     return await this.userDataSource.getByEmail(email)
   }
 
-  async createUser(user: UserCreationDto): Promise<boolean> {
+  async createUser(user: UserCreationDto): Promise<User> {
     return await this.userDataSource.create(user)
   }
 

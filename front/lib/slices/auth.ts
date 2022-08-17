@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit'
-import { ILoginRequest, ILoginResponse, IRegisterRequest } from '../../types/auth.types'
-import { IBasicSuccessResponse } from '../../types/global.types'
+import { ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse } from '../../types/auth.types'
 import { IUser } from '../../types/user.types'
 import { proxyClient } from '../axios'
 export enum AuthStates {
@@ -35,8 +34,8 @@ export const fetchMe = createAsyncThunk('auth/me', async (_, thunkAPI) => {
 
 export const register = createAsyncThunk('auth/register', async (credentials: IRegisterRequest, thunkAPI) => {
   try {
-    const resp = await proxyClient.post<IBasicSuccessResponse>('api/register', credentials)
-    return { message: resp.data.message }
+    const resp = await proxyClient.post<IRegisterResponse>('api/register', credentials)
+    return { me: resp.data.me }
   } catch (error) {
     return thunkAPI.rejectWithValue({ error: error.message })
   }
@@ -45,7 +44,16 @@ export const register = createAsyncThunk('auth/register', async (credentials: IR
 export const login = createAsyncThunk('auth/login', async (credentials: ILoginRequest, thunkAPI) => {
   try {
     const resp = await proxyClient.post<ILoginResponse>('api/login', credentials)
-    return { accessToken: resp.data.accessToken }
+    return { accessToken: resp.data.accessToken, me: resp.data.me }
+  } catch (error) {
+    return thunkAPI.rejectWithValue({ error: error.message })
+  }
+})
+
+export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
+  try {
+    const response = await proxyClient.delete('api/logout')
+    return response.data
   } catch (error) {
     return thunkAPI.rejectWithValue({ error: error.message })
   }
@@ -63,15 +71,19 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
       state.accessToken = action.payload.accessToken
+      state.me = action.payload.me
       state.loading = AuthStates.IDLE
     })
     builder.addCase(login.rejected, (state, action) => {
       state = { ...internalInitialState, error: action.error }
       throw new Error(action.error.message)
     })
-
+    builder.addCase(logout.fulfilled, () => internalInitialState)
+    builder.addCase(login.pending, (state) => {
+      state.loading = AuthStates.LOADING
+    })
     builder.addCase(register.fulfilled, (state, action) => {
-      state.currentMessage = action.payload.message
+      state.me = action.payload.me
       state.loading = AuthStates.IDLE
     })
     builder.addCase(register.rejected, (state, action) => {

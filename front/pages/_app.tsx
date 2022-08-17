@@ -2,12 +2,13 @@ import type { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
 import { createGlobalStyle } from 'styled-components'
 import { store, wrapper } from '../lib/store'
-
+import '../styles/global.css'
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+   
   }
 `
 

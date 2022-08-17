@@ -1,9 +1,11 @@
 import { AnyAction, combineReducers, configureStore } from '@reduxjs/toolkit'
 import { createWrapper, HYDRATE, MakeStore } from 'next-redux-wrapper'
 import { authSlice } from './slices/auth'
+import { usersSlice } from './slices/users'
 
 const combinedReducers = combineReducers({
-  authReducer: authSlice.reducer
+  authReducer: authSlice.reducer,
+  usersReducer: usersSlice.reducer
 })
 
 export type OurStore = ReturnType<typeof combinedReducers>

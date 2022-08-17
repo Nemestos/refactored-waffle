@@ -46,14 +46,28 @@ export default function AuthRouter(
 
   router.post('/refresh', async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const refresh = req.body.refresh
+      const refresh = req.cookies.refresh_token
       if (!refresh) {
         throw new ErrorException(ErrorCode.ValidationError, { refresh: 'no refresh token found' })
       }
       const [accessToken, refreshToken] = await refreshUseCase.execute(refresh)
-      res.cookie('refresh_token', refreshToken, { maxAge: 60 * 60 * 24 * 30, httpOnly: true, secure: false })
+      res.cookie('refresh_token', refreshToken, { maxAge: 60 * 60 * 24 * 30, httpOnly: false, secure: false })
       res.statusCode = StatusCodes.OK
       res.json({ accessToken })
+    } catch (err) {
+      next(err)
+    }
+  })
+
+  router.delete('/logout', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const refresh = req.cookies.refresh_token
+      if (!refresh) {
+        throw new ErrorException(ErrorCode.ValidationError, { refresh: 'no refresh token found' })
+      }
+      res.cookie('refresh_token', '', { maxAge: 60 * 60 * 24 * 30, httpOnly: false, secure: false })
+      res.statusCode = StatusCodes.OK
+      res.send()
     } catch (err) {
       next(err)
     }
@@ -63,9 +77,16 @@ export default function AuthRouter(
     validateBody(User, [Groups.CREATE]),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        await signupUseCase.execute(req.body as UserCreationDto)
+        const user = await signupUseCase.execute(req.body as UserCreationDto)
+        const [accessToken, refreshToken] = await signinUseCase.execute({
+          email: req.body.email,
+          password: req.body.password
+        })
+        const transformedUser = transform(User, user, [Groups.READ]) as ResponseStructureSingle<User>
+        res.cookie('refresh_token', refreshToken, { maxAge: 60 * 60 * 24 * 30, httpOnly: true, secure: false })
+
         res.statusCode = StatusCodes.CREATED
-        res.json({ message: "L'utilisateur a bien été crée" })
+        res.json({ accessToken, me: transformedUser })
       } catch (err) {
         next(err)
       }
@@ -74,10 +95,11 @@ export default function AuthRouter(
 
   router.post('/signin', validateBody(User, [Groups.AUTH]), async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const [accessToken, refreshToken] = await signinUseCase.execute(req.body as UserSigninDto)
+      const [accessToken, refreshToken, user] = await signinUseCase.execute(req.body as UserSigninDto)
+      const transformedUser = transform(User, user, [Groups.READ]) as ResponseStructureSingle<User>
       res.cookie('refresh_token', refreshToken, { maxAge: 60 * 60 * 24 * 30, httpOnly: true, secure: false })
       res.statusCode = StatusCodes.OK
-      res.json({ accessToken })
+      res.json({ accessToken, me: transformedUser })
     } catch (err) {
       next(err)
     }

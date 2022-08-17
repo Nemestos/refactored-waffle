@@ -1,5 +1,6 @@
 import SigninUseCase from '~/application/interfaces/uses-cases/auth/signin'
 import { UserSigninDto } from '~/domain/dtos/user-dto'
+import User from '~/domain/entities/user'
 import { ErrorCode } from '~/domain/errors/error-code'
 import { ErrorException } from '~/domain/errors/error-exception'
 import { PasswordHasher } from '~/domain/interfaces/hasher'
@@ -13,7 +14,7 @@ export class Signin implements SigninUseCase {
     private readonly jwtService: Jwt<any>
   ) {}
 
-  async execute(user: UserSigninDto): Promise<[string, string]> {
+  async execute(user: UserSigninDto): Promise<[string, string, User]> {
     const existingUser = await this.userRepository.findUserByEmail(user.email)
     if (!existingUser) {
       throw new ErrorException(ErrorCode.UnauthenticatedError)
@@ -25,6 +26,6 @@ export class Signin implements SigninUseCase {
     const accessToken = this.jwtService.generateAccessToken(existingUser)
     const refreshToken = this.jwtService.generateRefreshToken(existingUser)
     await this.jwtService.addToRefreshList(refreshToken, accessToken)
-    return [accessToken, refreshToken]
+    return [accessToken, refreshToken, existingUser]
   }
 }

@@ -8,7 +8,7 @@ import UserRepository from '~/infrastructure/interfaces/repositories/user-reposi
 export class Signup implements SignupUseCase {
   constructor(private readonly userRepository: UserRepository, private readonly passwordHasher: PasswordHasher) {}
 
-  async execute(user: User): Promise<boolean> {
+  async execute(user: User): Promise<User> {
     const existingUser = await this.userRepository.findUserByEmail(user.email)
     const email = user.email
     if (existingUser) {

@@ -1,5 +1,6 @@
 import { UserSigninDto } from '~/domain/dtos/user-dto'
+import User from '~/domain/entities/user'
 
 export default interface SigninUseCase {
-  execute(use: UserSigninDto): Promise<[string, string]>
+  execute(user: UserSigninDto): Promise<[string, string, User]>
 }

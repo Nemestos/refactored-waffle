@@ -1,6 +1,11 @@
 import Link from 'next/link'
-import { MdAppRegistration, MdLogin } from 'react-icons/md'
+import { useEffect } from 'react'
+import { MdAppRegistration, MdLogin, MdLogout } from 'react-icons/md'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
+
+import { fetchMe, logout } from '../lib/slices/auth'
+import { MyThunkDispatch, OurStore } from '../lib/store'
 const HeaderStyled = styled.header`
   z-index: 1;
   width: 100%;
@@ -24,23 +29,44 @@ const HorizonLine = styled.hr`
   padding-top: -10px;
 `
 
-export const Header: React.FC = () => {
-  //   const { loading, me } = useSelector((state: OurStore) => state.authReducer)
+export const Header = () => {
+  const { loading, me } = useSelector((state: OurStore) => state.authReducer)
+  const dispatch: MyThunkDispatch = useDispatch()
+
+  useEffect(() => {
+    const fetchUser = async () => await dispatch(fetchMe())
+    fetchUser()
+  }, [])
+
+  const handleLogout = async (e) => {
+    e.preventDefault()
+    console.log('logout')
+    await dispatch(logout())
+  }
   return (
     <>
       <HeaderStyled>
         <div></div>
         <h3>W M C</h3>
-        <div>
-          <Link href="/login">
-            <MdLogin>login</MdLogin>
-          </Link>
-          <Link href="/signup">
-            <MdAppRegistration>login</MdAppRegistration>
-          </Link>
-        </div>
-        {/* {loading === AuthStates.LOADING && 'Loading profile'}
-      {me != null ? me.firstname : 'pas connecté'} */}
+        {me != null ? (
+          <div>
+            <p>{me.firstname}</p>
+            <MdLogout onClick={handleLogout} />
+          </div>
+        ) : (
+          <div>
+            <Link href="/login">
+              <a>
+                <MdLogin>login</MdLogin>
+              </a>
+            </Link>
+            <Link href="/signup">
+              <a>
+                <MdAppRegistration>login</MdAppRegistration>
+              </a>
+            </Link>
+          </div>
+        )}
       </HeaderStyled>
       <HorizonLine />
     </>

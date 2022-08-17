@@ -5,7 +5,7 @@ import User from '~/domain/entities/user'
  * handle the connection from data source to expose generic to use case
  */
 export default interface UserRepository {
-  createUser(user: UserCreationDto): Promise<boolean>
+  createUser(user: UserCreationDto): Promise<User>
   addMotoToUser(userId: string, motoId: string): void
   updateUser(id: string, user: UserUpdateDto): Promise<boolean>
   getUsers(): Promise<User[]>
