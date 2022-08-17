@@ -1,11 +1,15 @@
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
 import { object, string } from 'yup'
-import { register } from '../lib/slices/auth'
 import { MyThunkDispatch } from '../lib/store'
-import { IRegisterRequest } from '../types/auth.types'
 import BaseForm from './BaseForm'
 import BaseInput from './BaseInput'
+
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
+
+import { register as registerSlice } from '../lib/slices/auth'
+import { IRegisterRequest } from '../types/auth.types'
 
 const registerSchema = object({
   email: string().email().required(),
@@ -13,31 +17,41 @@ const registerSchema = object({
   firstname: string().required(),
   surname: string().required()
 })
-const initialValues: IRegisterRequest = {
-  email: '',
-  password: '',
-  firstname: '',
-  surname: ''
-}
 
 const SignupForm = () => {
   const router = useRouter()
   const dispatch: MyThunkDispatch = useDispatch()
-  const formik = useFormik({
-    validationSchema: registerSchema,
-    initialValues,
-    onSubmit: async (values) => {
-      await dispatch(register(values))
-      router.push('/')
-    }
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(registerSchema)
   })
 
+  const onSubmit = async (data: IRegisterRequest) => {
+    try {
+      await dispatch(registerSlice(data))
+      router.push('/')
+    } catch (err) {
+      setError('apiError', { message: "Can't register" })
+    }
+  }
+
   return (
-    <BaseForm onSubmit={formik.handleSubmit} topText="Hello Biker" buttonText="Submit">
-      <BaseInput name="email" formik={formik} label="Email" />
-      <BaseInput name="password" formik={formik} label="Password" type="password" />
-      <BaseInput name="firstname" formik={formik} label="Firstname" />
-      <BaseInput name="surname" formik={formik} label="Surname" />
+    <BaseForm
+      onSubmit={handleSubmit(onSubmit)}
+      topText="Hello Biker"
+      buttonText="Submit"
+      serverError={errors.apiError ? (errors.apiError.message as string) : null}
+    >
+      <BaseInput name="email" register={register} errors={errors} label="Email" />
+
+      <BaseInput name="password" register={register} errors={errors} label="Password" type="password" />
+      <BaseInput name="firstname" register={register} errors={errors} label="Firstname" />
+      <BaseInput name="surname" register={register} errors={errors} label="Surname" />
     </BaseForm>
   )
 }

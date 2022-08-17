@@ -87,7 +87,8 @@ export const authSlice = createSlice({
       state.loading = AuthStates.IDLE
     })
     builder.addCase(register.rejected, (state, action) => {
-      state.error = action.error
+      state = { ...internalInitialState, error: action.error }
+      throw new Error(action.error.message)
     })
 
     builder.addCase(fetchMe.rejected, (state, action) => {

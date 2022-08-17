@@ -19,22 +19,6 @@ const loginSchema = object({
 const LoginForm = () => {
   const router = useRouter()
   const dispatch: MyThunkDispatch = useDispatch()
-  // const formik = useFormik({
-  //   validationSchema: loginSchema,
-  //   initialValues,
-  //   onSubmit: async (values, { setSubmitting, setFieldError }) => {
-  //     alert(JSON.stringify(values))
-  //     try {
-  //       const res = await dispatch(login(values))
-
-  //       setSubmitting(false)
-  //       router.push('/')
-  //     } catch (err) {
-  //       setFieldError('Impossible de se login')
-  //     }
-  //     // console.log(res)
-  //   }
-  // })
 
   const {
     register,
