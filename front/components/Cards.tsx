@@ -1,6 +1,5 @@
-import styled from 'styled-components'
 import NextImage from 'next/image'
-import CcImage from '../pictureAssets/Circuits/Assen.png'
+import styled from 'styled-components'
 
 const FormBox = styled.form`
   width: 580px;
@@ -68,7 +67,7 @@ function Cards() {
       <HorizoneLine />
 
       <CircuitImage>
-        <NextImage src={CcImage} width="410px" height="350px" />
+        <NextImage src="/Circuits/Assen.png" width="410px" height="350px" />
       </CircuitImage>
 
       <CircuitTitle>Carole Circuit Championship</CircuitTitle>

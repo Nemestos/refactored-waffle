@@ -1,8 +1,11 @@
-import styled from 'styled-components'
 import Link from 'next/link'
+import styled from 'styled-components'
 
 const NavContainer = styled.nav`
+  z-index: 1;
+
   display: flex;
+  color: white;
 `
 
 const NavUl = styled.ul`
@@ -24,7 +27,7 @@ function NavBar() {
     <NavContainer>
       <NavUl>
         <li>
-          <Link href="/">
+          <Link href="/home">
             <a>Home</a>
           </Link>
         </li>
@@ -33,6 +36,12 @@ function NavBar() {
             <a>Events</a>
           </Link>
         </li>
+        <li>
+          <Link href="/users">
+            <a>Users</a>
+          </Link>
+        </li>
+
         <li>
           <Link href="/">
             <a>Biker</a>

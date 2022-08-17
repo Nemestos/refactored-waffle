@@ -1,8 +1,11 @@
-import Wrapper from '../components/Wrapper'
+import dynamic from 'next/dynamic'
 import styled from 'styled-components'
-import NavBar from '../components/NavBar'
 import Cards from '../components/Cards'
 import Classification from '../components/Classification'
+
+const Template = dynamic(() => import('../components/Wrapper'), {
+  ssr: false
+})
 
 const Header = styled.div`
   height: 5rem;
@@ -34,15 +37,11 @@ const InfoContainer = styled.div`
 
 export default function HomePage() {
   return (
-    <Wrapper>
-      <Header> W M C </Header>
-      <HorizonLine />
-      <NavBar />
-
+    <Template>
       <InfoContainer>
         <Cards />
         <Classification />
       </InfoContainer>
-    </Wrapper>
+    </Template>
   )
 }

@@ -6,6 +6,7 @@ import styled from 'styled-components'
 
 import { fetchMe, logout } from '../lib/slices/auth'
 import { MyThunkDispatch, OurStore } from '../lib/store'
+import NavBar from './NavBar'
 const HeaderStyled = styled.header`
   z-index: 1;
   width: 100%;
@@ -36,7 +37,7 @@ export const Header = () => {
   useEffect(() => {
     const fetchUser = async () => await dispatch(fetchMe())
     fetchUser()
-  }, [])
+  }, [me])
 
   const handleLogout = async (e) => {
     e.preventDefault()
@@ -69,6 +70,7 @@ export const Header = () => {
         )}
       </HeaderStyled>
       <HorizonLine />
+      {me != null && <NavBar />}
     </>
   )
 }
