@@ -13,7 +13,6 @@ const ClassiDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-
   width: 400px;
   height: 80px;
   background-color: white;
