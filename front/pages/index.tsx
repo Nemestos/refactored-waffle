@@ -1,7 +1,6 @@
 import dynamic from 'next/dynamic'
 import styled from 'styled-components'
 import HomeInfo from '../components/HomeInfo'
-
 const Template = dynamic(() => import('../components/Wrapper'), {
   ssr: false
 })
@@ -20,7 +19,10 @@ export default function WelcomePage() {
   return (
     <>
       <Template>
-        <HomeInfo />
+        <div className="flex flex-row w-full h-full">
+          <HomeInfo />
+          <img src="/BackGround/motoGP.png" width="750px" height="300px" alt="pilotes" />
+        </div>
       </Template>
     </>
   )
