@@ -34,7 +34,6 @@ const Content = styled.div`
   align-content: center;
   justify-content: space-between;
   padding: 70px;
-
   padding-left: 15%;
 `
 
