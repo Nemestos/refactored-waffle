@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import NextImage from 'next/image'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Header } from './Header'
@@ -6,8 +6,10 @@ import { Header } from './Header'
 const Box = styled.div`
   display: flex;
   flex-direction: column;
+  /* position: relative; */
   height: 100%;
   width: 100%;
+  min-height: 100%;
 `
 const Main = styled.main`
   z-index: 1;
@@ -51,15 +53,16 @@ const Wrapper: React.FunctionComponent<any> = (props) => {
     return (
       <Box id="wrapper">
         <Header />
-        <Image
+        <NextImage src="/BackGround/background.jpg" layout="fill" className="object-cover w-full h-full" />
+        {/* <Image
           className="background"
           id="background-image"
-          src="/BackGround/background.jpg"
+          src=""
           width={width}
           height={height}
           layout="fill"
           style={{ zIndex: -1 }}
-        />
+        /> */}
         <Main>{props.children}</Main>
       </Box>
     )

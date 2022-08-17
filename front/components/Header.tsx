@@ -37,7 +37,7 @@ export const Header = () => {
   useEffect(() => {
     const fetchUser = async () => await dispatch(fetchMe())
     fetchUser()
-  }, [me])
+  }, [])
 
   const handleLogout = async (e) => {
     e.preventDefault()

@@ -1,5 +1,4 @@
-import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import NextImage from 'next/image'
 import styled from 'styled-components'
 
 export interface BackgroundProps {
@@ -21,34 +20,32 @@ function getWindowDimensions() {
   }
 }
 export function Background({ imageSrc }: BackgroundProps) {
-  const [width, setWidth] = useState<number>()
-  const [height, setheight] = useState<number>()
+  // const [width, setWidth] = useState<number>()
+  // const [height, setheight] = useState<number>()
 
-  useEffect(() => {
-    const { width, height } = getWindowDimensions()
+  // useEffect(() => {
+  //   const { width, height } = getWindowDimensions()
 
-    setWidth(width)
+  //   setWidth(width)
 
-    setheight(height)
-  }, [])
+  //   setheight(height)
+  // }, [])
 
-  useEffect(() => {
-    function handleResize() {
-      const { width, height } = getWindowDimensions()
+  // useEffect(() => {
+  //   function handleResize() {
+  //     const { width, height } = getWindowDimensions()
 
-      setWidth(width)
+  //     setWidth(width)
 
-      setheight(height)
-    }
+  //     setheight(height)
+  //   }
 
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  //   window.addEventListener('resize', handleResize)
+  //   return () => window.removeEventListener('resize', handleResize)
+  // }, [])
 
-  if (width && height) {
-    return <Image src={imageSrc} width={width} height={height} layout="fill" style={{ zIndex: -1 }} />
-  }
-
-  return null
+  // if (width && height) {
+  return <NextImage src={imageSrc} layout="fill" />
+  // }
 }
 export default Background
