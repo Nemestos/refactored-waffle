@@ -1,6 +1,8 @@
+import { Box, Grid } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { AuthGuard } from '../../components/AuthGuard'
+import { SearchInput } from '../../components/SearchInput'
 import UserSearchCard from '../../components/UserSearchCard'
 import Wrapper from '../../components/Wrapper'
 import { useGetAllUsersQuery } from '../../lib/api/userApi'
@@ -37,20 +39,18 @@ export const AllUsers = () => {
     <>
       <Wrapper>
         <AuthGuard customText={'Can get users'}>
-          <div className="flex flex-col gap-4 ">
-            <input
-              value={filterUser}
+          <Box display={'flex'} flexDirection="column" gap={3} justifyContent={'center'} alignItems="center">
+            <SearchInput
               onChange={onSearchChange}
-              type={'text'}
-              placeholder="Search user"
-              className="input input-bordered input-secondary w-full max-w-s"
+              onSearch={() => setFilterUser(filterUser)}
+              placeholder="SearchUser"
             />
-            <div className="grid gap-2 grid-cols-3">
+            <Grid container spacing={3}>
               {filteredUser()?.map((user) => (
-                <UserSearchCard user={user} key={user.id} />
+                <UserSearchCard user={user} key={user._id} />
               ))}
-            </div>
-          </div>
+            </Grid>
+          </Box>
         </AuthGuard>
       </Wrapper>
     </>

@@ -1,14 +1,15 @@
+import { Card, CardActions, CardContent, Chip, Grid, Typography } from '@mui/material'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useDeleteUserMutation } from '../lib/api/userApi'
-import { RootState, useAppSelector } from '../lib/store'
 import { IUser } from '../types/user.types'
+import { ConfirmationModal } from './ConfirmationModal'
+import { UpdateUserModal } from './UpdateUserModal'
 
 export interface UserSearchCardProps {
   user: IUser
 }
 function UserSearchCard({ user }: UserSearchCardProps) {
-  const me: IUser = useAppSelector((state: RootState) => state.userState.user)
   const [deleteUser, { isError, isSuccess, isLoading }] = useDeleteUserMutation()
   useEffect(() => {
     if (isError) {
@@ -22,27 +23,37 @@ function UserSearchCard({ user }: UserSearchCardProps) {
   const handleUserDelete = () => {
     deleteUser(user._id)
   }
+
   return (
-    <div className="card card-normal w-96 bg-base-200 shadow-xl" key={user.id}>
-      <div className="card-body">
-        {me.scopes.includes('can_delete_users') && (
-          <div className="card-actions justify-end" onClick={handleUserDelete}>
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </div>
-        )}
-        <h2 className="card-title self-center">
-          {user.firstname} {user.surname}
-        </h2>
-        <h3 className="card-title self-center">{user.email}</h3>
-        <div className="card-actions justify-end">
-          {user.scopes.map((scope) => (
-            <div className="badge badge-outline">{scope}</div>
-          ))}
-        </div>
-      </div>
-    </div>
+    <Grid item xs={2}>
+      <Card>
+        <CardContent>
+          <Typography sx={{ fontSize: 14 }} color="GrayText" gutterBottom>
+            #{user._id}
+          </Typography>
+          <Typography variant="h5" component="div">
+            {user.firstname} {user.surname}
+          </Typography>
+          <Grid container gap={1}>
+            {user.scopes.map((scope) => (
+              <Grid item>
+                <Chip label={scope} />
+              </Grid>
+            ))}
+          </Grid>
+        </CardContent>
+        <CardActions>
+          <ConfirmationModal
+            actionType="Delete"
+            entityType="User"
+            entity={user}
+            requiredScope="can_delete_users"
+            onTrigger={handleUserDelete}
+          />
+          <UpdateUserModal user={user} />
+        </CardActions>
+      </Card>
+    </Grid>
   )
 }
 

@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit'
-import { ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse } from '../../types/auth.types'
+import {
+  ILoginUserRequest,
+  ILoginUserResponse,
+  IRegisterUserRequest,
+  IRegisterUserResponse
+} from '../../types/auth.types'
 import { IUser } from '../../types/user.types'
 import { proxyClient } from '../axios'
 export enum AuthStates {
@@ -32,18 +37,18 @@ export const fetchMe = createAsyncThunk('auth/me', async (_, thunkAPI) => {
   }
 })
 
-export const register = createAsyncThunk('auth/register', async (credentials: IRegisterRequest, thunkAPI) => {
+export const register = createAsyncThunk('auth/register', async (credentials: IRegisterUserRequest, thunkAPI) => {
   try {
-    const resp = await proxyClient.post<IRegisterResponse>('api/register', credentials)
+    const resp = await proxyClient.post<IRegisterUserResponse>('api/register', credentials)
     return { me: resp.data.me }
   } catch (error) {
     return thunkAPI.rejectWithValue({ error: error.message })
   }
 })
 
-export const login = createAsyncThunk('auth/login', async (credentials: ILoginRequest, thunkAPI) => {
+export const login = createAsyncThunk('auth/login', async (credentials: ILoginUserRequest, thunkAPI) => {
   try {
-    const resp = await proxyClient.post<ILoginResponse>('api/login', credentials)
+    const resp = await proxyClient.post<ILoginUserResponse>('api/login', credentials)
     return { accessToken: resp.data.accessToken, me: resp.data.me }
   } catch (error) {
     return thunkAPI.rejectWithValue({ error: error.message })

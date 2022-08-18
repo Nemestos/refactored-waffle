@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useSignupUserMutation } from '../lib/api/authApi'
-import { IRegisterRequest } from '../types/auth.types'
+import { IRegisterUserRequest } from '../types/auth.types'
 
 const registerSchema = object({
   email: string().email().required(),
@@ -41,7 +41,7 @@ const SignupForm = () => {
     }
   }, [isLoading])
 
-  const onSubmit = (data: IRegisterRequest) => signupUser(data)
+  const onSubmit = (data: IRegisterUserRequest) => signupUser(data)
 
   return (
     <BaseForm

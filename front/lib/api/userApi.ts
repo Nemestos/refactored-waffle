@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { IBasicSuccessResponse, IObjectResponse } from '../../types/global.types'
-import { IUser } from '../../types/user.types'
+import { IUpdateUserRequest, IUser } from '../../types/user.types'
 import { setUser } from '../slices/users'
 import customFetchBase from './customFetchBase'
 
@@ -24,7 +24,7 @@ export const userApi = createApi({
         } catch (error) {}
       }
     }),
-    updateUser: builder.mutation<IUser, { id: string; user: FormData }>({
+    updateUser: builder.mutation<IUser, { id: string; user: IUpdateUserRequest }>({
       query({ id, user }) {
         return {
           url: `/users/${id}`,
@@ -63,9 +63,9 @@ export const userApi = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({
+              ...result.map(({ _id }) => ({
                 type: 'Users' as const,
-                id
+                id: _id
               })),
               { type: 'Users', id: 'LIST' }
             ]

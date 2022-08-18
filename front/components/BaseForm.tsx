@@ -1,5 +1,5 @@
+import { Button, FormControl, Typography } from '@mui/material'
 import React from 'react'
-import BaseButton from './BaseButton'
 
 export interface BaseFormProps {
   children: React.ReactNode
@@ -10,11 +10,17 @@ export interface BaseFormProps {
 }
 
 const BaseForm: React.FC<BaseFormProps> = ({ children, onSubmit, topText, buttonText, serverError }) => (
-  <form onSubmit={onSubmit} className="bg-white/30 flex flex-col p-4 w-1/4 rounded-xl shadow-sm">
-    <p className="text-white self-center text-xl font-bold mb-2">{topText}</p>
-    {children}
-    <BaseButton>{buttonText}</BaseButton>
-    {serverError && <div className="text-red-600 ml-1 h-4">{serverError}</div>}
+  <form onSubmit={onSubmit} className="bg-slate-500 p-4">
+    <FormControl>
+      <Typography textAlign={'center'} variant="h5">
+        {topText}
+      </Typography>
+      {children}
+      <Button variant="contained" color="primary" type="submit">
+        {buttonText}
+      </Button>
+      {serverError && <div className="text-red-600 ml-1 h-4">{serverError}</div>}
+    </FormControl>
   </form>
 )
 

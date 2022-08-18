@@ -1,26 +1,26 @@
 import { IUser } from './user.types'
 
-export interface IRegisterRequest {
+export interface IRegisterUserRequest {
   email: string
   password: string
   firstname: string
   surname: string
 }
 
-export interface IRegisterResponse {
+export interface IRegisterUserResponse {
   me: IUser
 }
-export interface ILoginRequest {
+export interface ILoginUserRequest {
   email: string
   password: string
 }
 
-export interface ILoginResponse {
+export interface ILoginUserResponse {
   accessToken: string
   me: IUser
 }
 
-export type IRefreshResponse = ILoginResponse
+export type IRefreshResponse = ILoginUserResponse
 export interface IAuthInfo {
   email: string
 }

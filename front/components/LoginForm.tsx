@@ -8,7 +8,7 @@ import BaseInput from './BaseInput'
 
 import { useEffect } from 'react'
 import { useSigninUserMutation } from '../lib/api/authApi'
-import { ILoginRequest } from '../types/auth.types'
+import { ILoginUserRequest } from '../types/auth.types'
 
 const loginSchema = object({
   email: string().email().required(),
@@ -44,7 +44,7 @@ const LoginForm = () => {
   //   }
   // }, [isSubmitSuccessful])
 
-  const onSubmit = async (data: ILoginRequest) => {
+  const onSubmit = async (data: ILoginUserRequest) => {
     console.log(data)
     loginUser(data)
   }

@@ -1,17 +1,22 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import { ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse } from '../../types/auth.types'
+import {
+  ILoginUserRequest,
+  ILoginUserResponse,
+  IRegisterUserRequest,
+  IRegisterUserResponse
+} from '../../types/auth.types'
 import customFetchBase from './customFetchBase'
 import { userApi } from './userApi'
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: customFetchBase,
   endpoints: (builder) => ({
-    signupUser: builder.mutation<IRegisterResponse, IRegisterRequest>({
+    signupUser: builder.mutation<IRegisterUserResponse, IRegisterUserRequest>({
       query(data) {
         return { url: 'auth/signup', method: 'POST', body: data }
       }
     }),
-    signinUser: builder.mutation<ILoginResponse, ILoginRequest>({
+    signinUser: builder.mutation<ILoginUserResponse, ILoginUserRequest>({
       query(data) {
         return { url: 'auth/signin', method: 'POST', body: data, credentials: 'include' }
       },

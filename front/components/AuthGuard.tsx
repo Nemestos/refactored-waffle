@@ -1,3 +1,4 @@
+import { Container, Typography } from '@mui/material'
 import React from 'react'
 import { RootState, useAppSelector } from '../lib/store'
 import { IUser } from '../types/user.types'
@@ -15,9 +16,13 @@ export const AuthGuard: React.FC<Props> = ({ children, customText }) => {
   }
 
   return (
-    <section>
-      <h2 className="text-center">Unauthorized</h2>
-      <div className="text-center">{customText || "Vous n'avez pas la permission d'accéder à cette ressource."}</div>
-    </section>
+    <Container>
+      <Typography variant="h2" color={'whitesmoke'} align="center">
+        Unauthorized
+      </Typography>
+      <Typography variant="h4" color={'gray'} align="center">
+        {customText || "Vous n'avez pas la permission d'accéder à cette ressource."}
+      </Typography>
+    </Container>
   )
 }
