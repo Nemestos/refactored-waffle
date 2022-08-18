@@ -1,6 +1,6 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { OurStore } from '../lib/store'
+import { RootState, useAppSelector } from '../lib/store'
+import { IUser } from '../types/user.types'
 
 type Props = {
   readonly customText?: React.ReactNode
@@ -8,11 +8,7 @@ type Props = {
 }
 
 export const AuthGuard: React.FC<Props> = ({ children, customText }) => {
-  const { loading, me } = useSelector((state: OurStore) => state.authReducer)
-
-  if (loading === 'loading') {
-    return <h3>loading...</h3>
-  }
+  const me: IUser = useAppSelector((state: RootState) => state.userState.user)
 
   if (me) {
     return <>{children}</>

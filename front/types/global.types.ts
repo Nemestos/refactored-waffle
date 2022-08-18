@@ -12,7 +12,7 @@ export interface IObjectResponse<T> {
   data: T
 }
 export interface IEntity {
-  id: string
+  _id: string
   createdAt: string
   updatedAt: string
 }
