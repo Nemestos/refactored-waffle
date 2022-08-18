@@ -4,6 +4,7 @@ import NavBar from '../components/NavBar'
 import Image from 'next/image'
 import CcImage from '../pictureAssets/Circuits/Assen.png'
 import EventInfo from '../components/EventInfo'
+import React from 'react'
 
 const Header = styled.div`
   height: 5rem;

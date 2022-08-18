@@ -1,6 +1,8 @@
 import Wrapper from '../components/Wrapper'
 import styled from 'styled-components'
 import NavBar from '../components/NavBar'
+import BikerInfo from '../components/BikerInfo'
+import { copyFileSync } from 'fs'
 
 const Header = styled.div`
   height: 5rem;
@@ -20,6 +22,12 @@ const HorizonLine = styled.hr`
   display: flex;
   flex-direction: start;
 `
+const BikerInfoWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding-top: 50px;
+`
 
 export default function EventPage() {
   return (
@@ -27,6 +35,9 @@ export default function EventPage() {
       <Header> W M C </Header>
       <HorizonLine />
       <NavBar />
+      <BikerInfoWrapper>
+        <BikerInfo />
+      </BikerInfoWrapper>
     </Wrapper>
   )
 }
