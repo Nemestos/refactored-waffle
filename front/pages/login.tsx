@@ -1,9 +1,7 @@
 import styled from 'styled-components'
 import LoginForm from '../components/LoginForm'
+import Wrapper from '../components/Wrapper'
 
-const Template = dynamic(() => import('../components/Wrapper'), {
-  ssr: false
-})
 // const Wrapper = dynamic(() => import("../components/wrapper"), {
 //     ssr: false,
 //   });
@@ -63,13 +61,13 @@ const Content = styled.div`
 export default function LogInPage() {
   return (
     <>
-      <Template>
+      <Wrapper>
         <Container id="Conatiner">
           <Content id="Content">
             <LoginForm />
           </Content>
         </Container>
-      </Template>
+      </Wrapper>
     </>
   )
 }

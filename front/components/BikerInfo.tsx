@@ -1,7 +1,14 @@
-import styled from 'styled-components'
-import { AiOutlineClockCircle, AiOutlineTrophy, AiOutlineCrown } from 'react-icons/ai'
-import { MdSpeed } from 'react-icons/md'
+import { Typography } from '@mui/material'
+import { useEffect } from 'react'
+import { AiOutlineClockCircle, AiOutlineCrown, AiOutlineTrophy } from 'react-icons/ai'
 import { IoIosPodium } from 'react-icons/io'
+import { MdSpeed } from 'react-icons/md'
+import { toast } from 'react-toastify'
+import styled from 'styled-components'
+import { useGetUserQuery } from '../lib/api/userApi'
+import { RootState, useAppSelector } from '../lib/store'
+import { IUser } from '../types/user.types'
+import { AuthGuard } from './AuthGuard'
 
 const Container = styled.div`
   background-color: #ffffff42;
@@ -117,66 +124,89 @@ const NumberTitle = styled.h1`
   padding: -2px;
   margin: -2px;
 `
+export interface BikerInfoProps {
+  id: string
+}
 
-function BikerInfo() {
+function BikerInfo({ id }: BikerInfoProps) {
+  const me: IUser = useAppSelector((state: RootState) => state.userState.user)
+  const { isLoading, isError, data } = useGetUserQuery(id)
+  useEffect(() => {
+    if (isError) {
+      toast.error(`Cant get profile ${id}`)
+    }
+  }, [isLoading])
+
+  if (isLoading) {
+    return <p>Loading...</p>
+  }
+  if (isError) {
+    return (
+      <Typography variant="h3" textAlign="center" color={'whitesmoke'}>
+        No profile with id {id}
+      </Typography>
+    )
+  }
   return (
-    <Container>
-      <ImgContainer id="Container">
-        <GlobalContainer id="Global-Container">
-          <InfoContainer>
-            <NumberContainer>
-              <NumberTitle>93</NumberTitle>
-            </NumberContainer>
-            <ProfileContainer>
-              <FirstNameTitle>Marc</FirstNameTitle>
-              <LastNameTitle>Marquez</LastNameTitle>
-            </ProfileContainer>
-          </InfoContainer>
-          <DownInfoContainer id="Down-Conatiner">
-            <IconContainerLeft>
-              <IconTextBox>
-                <AiOutlineTrophy size={70} />
-                <TextsWrapper>
-                  <NumberTimes>5</NumberTimes>
-                  <UnderTitle>CHAMPIONSHIPS</UnderTitle>
-                </TextsWrapper>
-              </IconTextBox>
+    <AuthGuard customText={"can't get profile"}>
+      <Container>
+        <ImgContainer id="Container">
+          <GlobalContainer id="Global-Container">
+            <InfoContainer>
+              <NumberContainer>
+                <NumberTitle>93</NumberTitle>
+              </NumberContainer>
+              <ProfileContainer>
+                <FirstNameTitle>{data?.firstname}</FirstNameTitle>
+                <LastNameTitle>{data?.surname}</LastNameTitle>
+              </ProfileContainer>
+            </InfoContainer>
+            <DownInfoContainer id="Down-Conatiner">
+              <IconContainerLeft>
+                <IconTextBox>
+                  <AiOutlineTrophy size={70} />
+                  <TextsWrapper>
+                    <NumberTimes>5</NumberTimes>
+                    <UnderTitle>CHAMPIONSHIPS</UnderTitle>
+                  </TextsWrapper>
+                </IconTextBox>
 
-              <IconTextBox>
-                <AiOutlineClockCircle size={70} />
-                <TextsWrapper>
-                  <NumberTimes>68</NumberTimes>
-                  <UnderTitle>POLES</UnderTitle>
-                </TextsWrapper>
-              </IconTextBox>
-              <IconTextBox>
-                <AiOutlineCrown size={70} />
-                <TextsWrapper>
-                  <NumberTimes>70</NumberTimes>
-                  <UnderTitle>VICTORIES</UnderTitle>
-                </TextsWrapper>
-              </IconTextBox>
-            </IconContainerLeft>
-            <IconContainerRight>
-              <IconTextBox>
-                <IoIosPodium size={70} />
-                <TextsWrapper>
-                  <NumberTimes>91</NumberTimes>
-                  <UnderTitle>PODIUMS</UnderTitle>
-                </TextsWrapper>
-              </IconTextBox>
-              <IconTextBox>
-                <MdSpeed size={70} />
-                <TextsWrapper>
-                  <NumberTimes>44</NumberTimes>
-                  <UnderTitle>FASTEST LAP</UnderTitle>
-                </TextsWrapper>
-              </IconTextBox>
-            </IconContainerRight>
-          </DownInfoContainer>
-        </GlobalContainer>
-      </ImgContainer>
-    </Container>
+                <IconTextBox>
+                  <AiOutlineClockCircle size={70} />
+                  <TextsWrapper>
+                    <NumberTimes>68</NumberTimes>
+                    <UnderTitle>POLES</UnderTitle>
+                  </TextsWrapper>
+                </IconTextBox>
+                <IconTextBox>
+                  <AiOutlineCrown size={70} />
+                  <TextsWrapper>
+                    <NumberTimes>70</NumberTimes>
+                    <UnderTitle>VICTORIES</UnderTitle>
+                  </TextsWrapper>
+                </IconTextBox>
+              </IconContainerLeft>
+              <IconContainerRight>
+                <IconTextBox>
+                  <IoIosPodium size={70} />
+                  <TextsWrapper>
+                    <NumberTimes>91</NumberTimes>
+                    <UnderTitle>PODIUMS</UnderTitle>
+                  </TextsWrapper>
+                </IconTextBox>
+                <IconTextBox>
+                  <MdSpeed size={70} />
+                  <TextsWrapper>
+                    <NumberTimes>44</NumberTimes>
+                    <UnderTitle>FASTEST LAP</UnderTitle>
+                  </TextsWrapper>
+                </IconTextBox>
+              </IconContainerRight>
+            </DownInfoContainer>
+          </GlobalContainer>
+        </ImgContainer>
+      </Container>
+    </AuthGuard>
   )
 }
 

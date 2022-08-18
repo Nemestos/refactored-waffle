@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import styled from 'styled-components'
+import { RootState, useAppSelector } from '../lib/store'
+import { IUser } from '../types/user.types'
 
 const NavContainer = styled.nav`
   z-index: 1;
@@ -23,6 +25,8 @@ const NavUl = styled.ul`
 `
 
 function NavBar() {
+  const me: IUser = useAppSelector((state: RootState) => state.userState.user)
+
   return (
     <NavContainer>
       <NavUl>
@@ -43,7 +47,7 @@ function NavBar() {
         </li>
 
         <li>
-          <Link href="/">
+          <Link href={{ pathname: `/users/${me._id}` }}>
             <a>Biker</a>
           </Link>
         </li>

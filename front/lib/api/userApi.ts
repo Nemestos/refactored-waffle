@@ -23,7 +23,7 @@ export const userApi = createApi({
           dispatch(setUser(data))
         } catch (error) {}
       },
-      providesTags: (result) => [{ type: 'Users', id: result._id }]
+      providesTags: (result) => [{ type: 'Users', id: result?._id || null }]
     }),
     updateUser: builder.mutation<IUser, { id: string; user: IUpdateUserRequest }>({
       query({ id, user }) {

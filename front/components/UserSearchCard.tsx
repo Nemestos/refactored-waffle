@@ -1,15 +1,18 @@
 import { Card, CardActions, CardContent, Chip, Grid, Typography } from '@mui/material'
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useDeleteUserMutation } from '../lib/api/userApi'
 import { IUser } from '../types/user.types'
 import { ConfirmationModal } from './ConfirmationModal'
+import { ScopeButton } from './ScopeButton'
 import { UpdateUserModal } from './UpdateUserModal'
 
 export interface UserSearchCardProps {
   user: IUser
 }
 function UserSearchCard({ user }: UserSearchCardProps) {
+  const router = useRouter()
   const [deleteUser, { isError, isSuccess, isLoading }] = useDeleteUserMutation()
   useEffect(() => {
     if (isError) {
@@ -23,7 +26,9 @@ function UserSearchCard({ user }: UserSearchCardProps) {
   const handleUserDelete = () => {
     deleteUser(user._id)
   }
-
+  const handleViewUser = () => {
+    router.push(`/users/${user._id}`)
+  }
   return (
     <Grid item xs={2}>
       <Card>
@@ -51,6 +56,8 @@ function UserSearchCard({ user }: UserSearchCardProps) {
             onTrigger={handleUserDelete}
           />
           <UpdateUserModal user={user} />
+
+          <ScopeButton content="View" requiredScope="can_read_users" onClick={handleViewUser} />
         </CardActions>
       </Card>
     </Grid>
