@@ -1,3 +1,4 @@
+import { Box } from '@mui/material'
 import dynamic from 'next/dynamic'
 import styled from 'styled-components'
 import HomeInfo from '../components/HomeInfo'
@@ -19,10 +20,10 @@ export default function WelcomePage() {
   return (
     <>
       <Template>
-        <div className="flex flex-row w-full h-full">
+        <Box display={'flex'} justifyContent={'center'} flexDirection="row" gap={9}>
           <HomeInfo />
           <img src="/BackGround/motoGP.png" width="750px" height="300px" alt="pilotes" />
-        </div>
+        </Box>
       </Template>
     </>
   )

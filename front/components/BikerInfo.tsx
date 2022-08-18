@@ -1,26 +1,28 @@
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { AiOutlineClockCircle, AiOutlineCrown, AiOutlineTrophy } from 'react-icons/ai'
 import { IoIosPodium } from 'react-icons/io'
 import { MdSpeed } from 'react-icons/md'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
-import { useGetUserQuery } from '../lib/api/userApi'
+import { useDeleteUserMutation, useGetUserQuery } from '../lib/api/userApi'
 import { RootState, useAppSelector } from '../lib/store'
 import { IUser } from '../types/user.types'
 import { AuthGuard } from './AuthGuard'
+import { ConfirmationModal } from './ConfirmationModal'
 import { UpdateUserModal } from './UpdateUserModal'
 
 const Container = styled.div`
   background-color: #ffffff42;
-  width: 1000px;
-  height: 550px;
+  width: 60%;
+  height: 100%;
 `
 
 const ImgContainer = styled.div`
   clip-path: polygon(0px 0px, 63% 0px, 38% 100%, 0% 100%);
-  width: 1250px;
-  height: 550px;
+  width: 130%;
+  height: 600px;
   background-color: red;
   display: flex;
   flex-direction: row;
@@ -130,18 +132,32 @@ export interface BikerInfoProps {
 }
 
 function BikerInfo({ id }: BikerInfoProps) {
+  const router = useRouter()
   const me: IUser = useAppSelector((state: RootState) => state.userState.user)
-  const { isLoading, isError, data } = useGetUserQuery(id)
+  const [deleteUser, deleteUserStates] = useDeleteUserMutation()
+
+  const getUserStates = useGetUserQuery(id)
+  const user = getUserStates.data
   useEffect(() => {
-    if (isError) {
+    if (getUserStates.isError) {
       toast.error(`Cant get profile ${id}`)
     }
-  }, [isLoading])
+  }, [getUserStates.isLoading])
 
-  if (isLoading) {
+  useEffect(() => {
+    if (deleteUserStates.isError) {
+      toast.error(`Cant get delete profile ${id}`)
+    }
+  }, [deleteUserStates.isLoading])
+  const handleUserDelete = () => {
+    deleteUser(id)
+    router.push('/users')
+  }
+
+  if (getUserStates.isLoading) {
     return <p>Loading...</p>
   }
-  if (isError) {
+  if (getUserStates.isError) {
     return (
       <Typography variant="h3" textAlign="center" color={'whitesmoke'}>
         No profile with id {id}
@@ -158,11 +174,9 @@ function BikerInfo({ id }: BikerInfoProps) {
                 <NumberTitle>93</NumberTitle>
               </NumberContainer>
               <ProfileContainer>
-                <FirstNameTitle>{data?.firstname}</FirstNameTitle>
-                <LastNameTitle>{data?.surname}</LastNameTitle>
+                <FirstNameTitle>{user?.firstname}</FirstNameTitle>
+                <LastNameTitle>{user?.surname}</LastNameTitle>
               </ProfileContainer>
-
-              <UpdateUserModal user={data} />
             </InfoContainer>
             <DownInfoContainer id="Down-Conatiner">
               <IconContainerLeft>
@@ -208,6 +222,16 @@ function BikerInfo({ id }: BikerInfoProps) {
             </DownInfoContainer>
           </GlobalContainer>
         </ImgContainer>
+        <Box display={'flex'} gap={3} margin={2}>
+          <ConfirmationModal
+            actionType="Delete"
+            entityType="User"
+            entity={user}
+            requiredScope="can_delete_users"
+            onTrigger={handleUserDelete}
+          />
+          <UpdateUserModal user={user} />
+        </Box>
       </Container>
     </AuthGuard>
   )

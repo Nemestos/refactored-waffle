@@ -3,11 +3,13 @@ import 'express-async-errors'
 import { StatusCodes } from 'http-status-codes'
 import AddMotoToUserUseCase from '~/application/interfaces/uses-cases/user/add-moto-to-user'
 import GetAllUsersUseCase from '~/application/interfaces/uses-cases/user/get-all-users'
+import GetUserEventsUseCase from '~/application/interfaces/uses-cases/user/get-event-of-user'
 import GetUserByIdUseCase from '~/application/interfaces/uses-cases/user/get-user-by-id'
 import UpdateUserUseCase from '~/application/interfaces/uses-cases/user/update-user'
 import { DeleteUserById } from '~/application/use-cases/user/delete-user-by-id'
 import { Groups } from '~/domain/base/groups'
 import { UserUpdateDto } from '~/domain/dtos/user-dto'
+import Event from '~/domain/entities/event'
 import User from '~/domain/entities/user'
 import { Scopes } from '~/domain/enums/scope-enum'
 import { Jwt } from '~/domain/interfaces/jwt'
@@ -17,6 +19,7 @@ import { transform } from '~/presentation/middlewares/response-wrapper.middlewar
 import { validateBody } from '../middlewares/validate-body.middleware'
 export default function UsersRouter(
   getAllUsersUseCase: GetAllUsersUseCase,
+  getUserEvents: GetUserEventsUseCase,
   addMotoToUserUseCase: AddMotoToUserUseCase,
   updateUserUseCase: UpdateUserUseCase,
   getUserByIdUseCase: GetUserByIdUseCase,
@@ -25,6 +28,7 @@ export default function UsersRouter(
 ) {
   const router = express.Router()
   const getUsersMiddleware = authMiddleware(jwtService, [Scopes.CanGetUsers])
+  const getUsersEventsMiddleware = authMiddleware(jwtService, [Scopes.CanGetEvents])
   const updateUserMiddleware = authMiddleware(jwtService, [Scopes.CanUpdateUsers], true)
   const deleteUsersMiddleware = authMiddleware(jwtService, [Scopes.CanDeleteUsers], true)
   router.get('/', getUsersMiddleware, async (req: Request, res: Response, next: NextFunction) => {
@@ -52,6 +56,16 @@ export default function UsersRouter(
       }
     }
   )
+  router.get('/:userId/events/', getUsersEventsMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+    const { userId } = req.params
+    try {
+      const events = await getUserEvents.execute(userId)
+      const transformedEvents = transform(Event, events, [Groups.READ]) as ResponseStructureArray<Event>
+      return res.status(StatusCodes.OK).json(transformedEvents)
+    } catch (error) {
+      next(error)
+    }
+  })
 
   router.patch(
     '/:id',

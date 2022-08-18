@@ -1,10 +1,8 @@
-import Wrapper from '../components/Wrapper'
-import styled from 'styled-components'
-import NavBar from '../components/NavBar'
 import Image from 'next/image'
-import CcImage from '../pictureAssets/Circuits/Assen.png'
+import styled from 'styled-components'
 import EventInfo from '../components/EventInfo'
-import React from 'react'
+import NavBar from '../components/NavBar'
+import Wrapper from '../components/Wrapper'
 
 const Header = styled.div`
   height: 5rem;
@@ -41,7 +39,7 @@ export default function EventPage() {
       <NavBar />
 
       <EventContainer>
-        <Image src={CcImage} width="350px" height="200px" />
+        <Image src="/Circuits/Assen.png" width="350px" height="200px" />
         <EventInfo></EventInfo>
       </EventContainer>
     </Wrapper>

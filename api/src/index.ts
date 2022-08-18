@@ -23,6 +23,7 @@ import { UpdateMoto } from './application/use-cases/moto/update-moto'
 import AddMotoToUser from './application/use-cases/user/add-moto-to-user'
 import { DeleteUserById } from './application/use-cases/user/delete-user-by-id'
 import { GetAllUsers } from './application/use-cases/user/get-all-users'
+import GetUserEvents from './application/use-cases/user/get-event-of-user'
 import { GetUserById } from './application/use-cases/user/get-user-by-id'
 import { UpdateUser } from './application/use-cases/user/update-user'
 import { config } from './config'
@@ -46,6 +47,7 @@ import { client } from './utils/cache'
   jwt.loadOrInitRefreshList()
   const userMiddleware = UsersRouter(
     new GetAllUsers(userRepo),
+    new GetUserEvents(userRepo, eventRepo),
     new AddMotoToUser(userRepo, motoRepo),
     new UpdateUser(userRepo),
     new GetUserById(userRepo),
