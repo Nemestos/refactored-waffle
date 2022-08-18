@@ -9,6 +9,7 @@ import { useGetUserQuery } from '../lib/api/userApi'
 import { RootState, useAppSelector } from '../lib/store'
 import { IUser } from '../types/user.types'
 import { AuthGuard } from './AuthGuard'
+import { UpdateUserModal } from './UpdateUserModal'
 
 const Container = styled.div`
   background-color: #ffffff42;
@@ -160,6 +161,8 @@ function BikerInfo({ id }: BikerInfoProps) {
                 <FirstNameTitle>{data?.firstname}</FirstNameTitle>
                 <LastNameTitle>{data?.surname}</LastNameTitle>
               </ProfileContainer>
+
+              <UpdateUserModal user={data} />
             </InfoContainer>
             <DownInfoContainer id="Down-Conatiner">
               <IconContainerLeft>

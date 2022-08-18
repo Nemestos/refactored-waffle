@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { object, string } from 'yup'
 import { useUpdateUserMutation } from '../lib/api/userApi'
+import { RootState, useAppSelector } from '../lib/store'
 import { IUpdateUserRequest, IUser } from '../types/user.types'
 import BaseForm from './BaseForm'
 import BaseInput from './BaseInput'
@@ -23,6 +24,7 @@ export interface UpdateUserModalProps {
 
 export const UpdateUserModal = ({ user }: UpdateUserModalProps) => {
   const router = useRouter()
+  const me: IUser = useAppSelector((state: RootState) => state.userState.user)
 
   const [updateUser, { isLoading, isError, isSuccess }] = useUpdateUserMutation()
 
@@ -61,7 +63,13 @@ export const UpdateUserModal = ({ user }: UpdateUserModalProps) => {
   }
   return (
     <div>
-      <ScopeButton content="Update" requiredScope="can_update_users" onClick={handleOpen} />
+      {me._id === user._id ? (
+        <Button onClick={handleOpen} size="small" variant="contained">
+          Update
+        </Button>
+      ) : (
+        <ScopeButton content="Update" requiredScope="can_update_users" onClick={handleOpen} />
+      )}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Update user #{user._id}</DialogTitle>
         <DialogContent>

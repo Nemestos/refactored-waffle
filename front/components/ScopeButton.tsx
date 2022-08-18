@@ -15,7 +15,7 @@ export const ScopeButton = ({ sx, content, requiredScope, onClick }: ScopeButton
     return null
   }
   return (
-    <Button sx={sx} onClick={onClick} size="small">
+    <Button sx={sx} onClick={onClick} size="small" variant="contained">
       {content}
     </Button>
   )
