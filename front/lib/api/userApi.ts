@@ -81,9 +81,28 @@ export const userApi = createApi({
         }
       },
       invalidatesTags: [{ type: 'Users', id: 'LIST' }]
+    }),
+    deleteMotoOfUser: builder.mutation<IUser, { userId: string; motoId: string }>({
+      query({ userId, motoId }) {
+        return {
+          url: `/users/${userId}/motos/${motoId}`,
+          method: 'DELETE',
+          credentials: 'include'
+        }
+      },
+      invalidatesTags: (result, error, { userId }) => [
+        { type: 'Users', id: 'LIST' },
+        { type: 'Users', id: userId }
+      ]
     })
   })
 })
 
-export const { useDeleteUserMutation, useUpdateUserMutation, useGetAllUsersQuery, useGetMeQuery, useGetUserQuery } =
-  userApi
+export const {
+  useDeleteUserMutation,
+  useDeleteMotoOfUserMutation,
+  useUpdateUserMutation,
+  useGetAllUsersQuery,
+  useGetMeQuery,
+  useGetUserQuery
+} = userApi

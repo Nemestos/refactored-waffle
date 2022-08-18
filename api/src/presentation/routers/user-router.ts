@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express'
 import 'express-async-errors'
 import { StatusCodes } from 'http-status-codes'
 import AddMotoToUserUseCase from '~/application/interfaces/uses-cases/user/add-moto-to-user'
+import DeleteMotoToUserUseCase from '~/application/interfaces/uses-cases/user/delete-moto-to-user'
 import GetAllUsersUseCase from '~/application/interfaces/uses-cases/user/get-all-users'
 import GetUserEventsUseCase from '~/application/interfaces/uses-cases/user/get-event-of-user'
 import GetUserByIdUseCase from '~/application/interfaces/uses-cases/user/get-user-by-id'
@@ -21,6 +22,7 @@ export default function UsersRouter(
   getAllUsersUseCase: GetAllUsersUseCase,
   getUserEvents: GetUserEventsUseCase,
   addMotoToUserUseCase: AddMotoToUserUseCase,
+  deleteMotoToUserUseCase: DeleteMotoToUserUseCase,
   updateUserUseCase: UpdateUserUseCase,
   getUserByIdUseCase: GetUserByIdUseCase,
   deleteUserByIdUseCase: DeleteUserById,
@@ -56,6 +58,21 @@ export default function UsersRouter(
       }
     }
   )
+  router.delete(
+    '/:userId/motos/:motoId',
+    updateUserMiddleware,
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { userId, motoId } = req.params
+      try {
+        await deleteMotoToUserUseCase.execute(userId, motoId)
+
+        return res.json({ message: `La moto ${motoId} a bien été supprimé à ${userId}` })
+      } catch (error) {
+        next(error)
+      }
+    }
+  )
+
   router.get('/:userId/events/', getUsersEventsMiddleware, async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.params
     try {
@@ -76,8 +93,9 @@ export default function UsersRouter(
       try {
         await updateUserUseCase.execute(id, req.body as UserUpdateDto)
         const updatedUser = await getUserByIdUseCase.execute(id)
+        const transformedUser = transform(User, updatedUser, [Groups.READ]) as ResponseStructureSingle<User>
         res.statusCode = StatusCodes.OK
-        res.json(updatedUser)
+        res.json(transformedUser)
       } catch (err) {
         next(err)
       }

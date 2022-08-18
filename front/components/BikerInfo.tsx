@@ -11,6 +11,7 @@ import { RootState, useAppSelector } from '../lib/store'
 import { IUser } from '../types/user.types'
 import { AuthGuard } from './AuthGuard'
 import { ConfirmationModal } from './ConfirmationModal'
+import { ScopeButton } from './ScopeButton'
 import { UpdateUserModal } from './UpdateUserModal'
 
 const Container = styled.div`
@@ -231,6 +232,11 @@ function BikerInfo({ id }: BikerInfoProps) {
             onTrigger={handleUserDelete}
           />
           <UpdateUserModal user={user} />
+          <ScopeButton
+            content="Motos"
+            requiredScope="can_read_motos"
+            onClick={() => router.push(`/users/${user._id}/motos`)}
+          />
         </Box>
       </Container>
     </AuthGuard>

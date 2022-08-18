@@ -64,8 +64,10 @@ export default function EventsRouter(
         await updateEventsUseCase.execute(id, {
           ...req.body
         } as EventUpdateDto)
+        const updatedEvent = await getEventById.execute(id)
+        const transformedEvent = transform(Event, updatedEvent, [Groups.READ]) as ResponseStructureSingle<Event>
         res.statusCode = StatusCodes.OK
-        res.json({ message: "L'event a bien été mis à jour" })
+        res.json(transformedEvent)
       } catch (err) {
         next(err)
       }

@@ -2,12 +2,14 @@ import { AnyAction, combineReducers, configureStore } from '@reduxjs/toolkit'
 import { createWrapper, HYDRATE, MakeStore } from 'next-redux-wrapper'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { authApi } from './api/authApi'
+import { motoApi } from './api/motoApi'
 import { userApi } from './api/userApi'
 import userReducer from './slices/users'
 
 const combinedReducers = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
+  [motoApi.reducerPath]: motoApi.reducer,
 
   userState: userReducer
 })

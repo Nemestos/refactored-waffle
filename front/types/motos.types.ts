@@ -29,7 +29,11 @@ export enum MotoCategory {
   Electric = 'Electric',
   Classic = 'Classic'
 }
-
+export interface IUpdateMotoRequest {
+  manufacturer: string
+  model: string
+  category: MotoCategory
+}
 export interface IMoto extends IEntity {
   manufacturer: string
   model: string
