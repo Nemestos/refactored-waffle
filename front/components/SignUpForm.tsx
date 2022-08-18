@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router'
-import { useDispatch } from 'react-redux'
 import { object, string } from 'yup'
-import { MyThunkDispatch } from '../lib/store'
 import BaseForm from './BaseForm'
 import BaseInput from './BaseInput'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 
-import { register as registerSlice } from '../lib/slices/auth'
+import { useEffect } from 'react'
+import { toast } from 'react-toastify'
+import { useSignupUserMutation } from '../lib/api/authApi'
 import { IRegisterRequest } from '../types/auth.types'
 
 const registerSchema = object({
@@ -20,25 +20,28 @@ const registerSchema = object({
 
 const SignupForm = () => {
   const router = useRouter()
-  const dispatch: MyThunkDispatch = useDispatch()
+
+  const [signupUser, { isLoading, isError, isSuccess }] = useSignupUserMutation()
 
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors }
   } = useForm({
     resolver: yupResolver(registerSchema)
   })
 
-  const onSubmit = async (data: IRegisterRequest) => {
-    try {
-      await dispatch(registerSlice(data))
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success('Merci de vous être inscrit')
       router.push('/')
-    } catch (err) {
-      setError('apiError', { message: "Can't register" })
     }
-  }
+    if (isError) {
+      toast.error('impossible de s"inscrire ', { position: 'top-right' })
+    }
+  }, [isLoading])
+
+  const onSubmit = (data: IRegisterRequest) => signupUser(data)
 
   return (
     <BaseForm

@@ -19,7 +19,7 @@ export const authMiddleware = (
   withAuthorizationId = false
 ) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const auth = req.headers.authorization
+    const auth = req.headers.authorization || req.cookies.access_token
     if (!auth && !auth?.startsWith('Bearer')) {
       throw new ErrorException(ErrorCode.MissingTokenError)
     }

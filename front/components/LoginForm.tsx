@@ -1,14 +1,13 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
-import { useDispatch } from 'react-redux'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 import { object, string } from 'yup'
-import { MyThunkDispatch } from '../lib/store'
 import BaseForm from './BaseForm'
 import BaseInput from './BaseInput'
 
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm } from 'react-hook-form'
-
-import { login } from '../lib/slices/auth'
+import { useEffect } from 'react'
+import { useSigninUserMutation } from '../lib/api/authApi'
 import { ILoginRequest } from '../types/auth.types'
 
 const loginSchema = object({
@@ -18,33 +17,40 @@ const loginSchema = object({
 
 const LoginForm = () => {
   const router = useRouter()
-  const dispatch: MyThunkDispatch = useDispatch()
+  const [loginUser, { isLoading, isError, error, isSuccess }] = useSigninUserMutation()
 
   const {
+    reset,
     register,
     handleSubmit,
-    setError,
-    formState: { errors }
+    formState: { isSubmitSuccessful, errors }
   } = useForm({
     resolver: yupResolver(loginSchema)
   })
 
-  const onSubmit = async (data: ILoginRequest) => {
-    try {
-      await dispatch(login(data))
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success('Vous êtes maintenant login')
       router.push('/')
-    } catch (err) {
-      setError('apiError', { message: "Can't login" })
     }
+    if (isError) {
+      toast.error('impossible de se login', { position: 'top-right' })
+    }
+  }, [isLoading])
+
+  // useEffect(() => {
+  //   if (isSubmitSuccessful) {
+  //     reset()
+  //   }
+  // }, [isSubmitSuccessful])
+
+  const onSubmit = async (data: ILoginRequest) => {
+    console.log(data)
+    loginUser(data)
   }
 
   return (
-    <BaseForm
-      onSubmit={handleSubmit(onSubmit)}
-      topText="Welcome Back Biker"
-      buttonText="Submit"
-      serverError={errors.apiError ? (errors.apiError.message as string) : null}
-    >
+    <BaseForm onSubmit={handleSubmit(onSubmit)} topText="Welcome Back Biker" buttonText="Submit">
       <BaseInput name="email" register={register} errors={errors} label="Email" />
       <BaseInput name="password" register={register} errors={errors} label="Password" type="password" />
     </BaseForm>

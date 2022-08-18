@@ -1,8 +1,11 @@
 import type { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { createGlobalStyle } from 'styled-components'
 import { store, wrapper } from '../lib/store'
 import '../styles/global.css'
+
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -15,6 +18,7 @@ const GlobalStyle = createGlobalStyle`
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
+      <ToastContainer />
       <GlobalStyle />
       <Provider store={store}>
         <Component {...pageProps} />

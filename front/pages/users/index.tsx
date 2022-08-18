@@ -1,66 +1,57 @@
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { AuthGuard } from '../../components/AuthGuard'
+import { toast } from 'react-toastify'
 import UserSearchCard from '../../components/UserSearchCard'
 import Wrapper from '../../components/Wrapper'
-import { fetchUsers } from '../../lib/slices/users'
-import { MyThunkDispatch, OurStore } from '../../lib/store'
+import { useGetAllUsersQuery } from '../../lib/api/userApi'
 export const AllUsers = () => {
-  const { users } = useSelector((state: OurStore) => state.usersReducer)
+  const { isLoading, isError, data } = useGetAllUsersQuery()
   const [filterUser, setFilterUser] = useState('')
 
-  const dispatch: MyThunkDispatch = useDispatch()
+  useEffect(() => {
+    if (isError) {
+      toast.error('cant get users')
+    }
+  }, [isLoading])
 
   const onSearchChange = (event) => {
     const { value: val } = event.target
-    console.log(val)
     setFilterUser(val)
   }
   const filteredUser = () => {
     if (filterUser === '') {
-      return users
+      return data
     }
-    return users.filter((user) => user.firstname.toLowerCase().startsWith(filterUser.toLowerCase()))
+    return data.filter((user) => user.firstname.toLowerCase().startsWith(filterUser.toLowerCase()))
   }
-  useEffect(() => {
-    const getUsers = async () => await dispatch(fetchUsers())
-    getUsers()
-  }, [])
+  if (isLoading) {
+    return (
+      <>
+        <Wrapper>
+          <p>Loading users...</p>
+        </Wrapper>
+      </>
+    )
+  }
   return (
     <>
       <Wrapper>
-        <AuthGuard customText={<p className="text-white">Can't get the users</p>}>
-          <div className="flex flex-col gap-4 ">
-            <input
-              value={filterUser}
-              onChange={onSearchChange}
-              type={'text'}
-              placeholder="Search user"
-              className="input input-bordered input-secondary w-full max-w-s"
-            />
-            <div className="grid gap-2 grid-cols-3">
-              {filteredUser()?.map((user, index) => (
-                <UserSearchCard user={user} key={user.id} />
-              ))}
-            </div>
+        <div className="flex flex-col gap-4 ">
+          <input
+            value={filterUser}
+            onChange={onSearchChange}
+            type={'text'}
+            placeholder="Search user"
+            className="input input-bordered input-secondary w-full max-w-s"
+          />
+          <div className="grid gap-2 grid-cols-3">
+            {filteredUser()?.map((user) => (
+              <UserSearchCard user={user} key={user.id} />
+            ))}
           </div>
-        </AuthGuard>
+        </div>
       </Wrapper>
     </>
   )
 }
-
-// export const getServerSideProps = user({
-//   callback: async (_, store) => {
-//     const { dispatch }: { dispatch: MyThunkDispatch } = store
-//     await dispatch(fetchUsers())
-
-//     return {
-//       props: {
-//         users: store.getState().usersReducer.users
-//       }
-//     }
-//   }
-// })
 
 export default AllUsers

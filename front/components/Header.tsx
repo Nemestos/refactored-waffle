@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { MdAppRegistration, MdLogin, MdLogout } from 'react-icons/md'
-import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import styled from 'styled-components'
+import { useLogoutUserMutation } from '../lib/api/authApi'
+import { userApi } from '../lib/api/userApi'
 
-import { fetchMe, logout } from '../lib/slices/auth'
-import { MyThunkDispatch, OurStore } from '../lib/store'
+import { RootState, useAppDispatch, useAppSelector } from '../lib/store'
+import { IUser } from '../types/user.types'
 import NavBar from './NavBar'
 const HeaderStyled = styled.header`
   z-index: 1;
@@ -31,27 +33,37 @@ const HorizonLine = styled.hr`
 `
 
 export const Header = () => {
-  const { loading, me } = useSelector((state: OurStore) => state.authReducer)
-  const dispatch: MyThunkDispatch = useDispatch()
+  const user: IUser = useAppSelector((state: RootState) => state.userState.user)
+  const dispatch = useAppDispatch()
+
+  const [logoutUser, { isLoading, isSuccess, isError }] = useLogoutUserMutation()
 
   useEffect(() => {
-    const fetchUser = async () => await dispatch(fetchMe())
-    fetchUser()
+    if (isSuccess) {
+      toast.info('Sucessfull logout', { position: 'top-right' })
+      window.location.href = '/login'
+    }
+    if (isError) {
+      toast.error("Can't logout", { position: 'top-right' })
+    }
+  }, [isLoading])
+  useEffect(() => {
+    const refreshUser = async () => await dispatch(userApi.endpoints.getMe.initiate(null))
+    refreshUser()
   }, [])
-
   const handleLogout = async (e) => {
     e.preventDefault()
     console.log('logout')
-    await dispatch(logout())
+    logoutUser()
   }
   return (
     <>
       <HeaderStyled>
         <div></div>
         <h3>W M C</h3>
-        {me != null ? (
+        {user != null ? (
           <div>
-            <p>{me.firstname}</p>
+            <p>{user.firstname}</p>
             <MdLogout onClick={handleLogout} />
           </div>
         ) : (
@@ -70,7 +82,7 @@ export const Header = () => {
         )}
       </HeaderStyled>
       <HorizonLine />
-      {me != null && <NavBar />}
+      {user != null && <NavBar />}
     </>
   )
 }

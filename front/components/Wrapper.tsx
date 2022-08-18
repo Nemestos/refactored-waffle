@@ -6,7 +6,7 @@ import { Header } from './Header'
 const Box = styled.div`
   display: flex;
   flex-direction: column;
-  /* position: relative; */
+  position: relative;
   height: 100%;
   width: 100%;
   min-height: 100%;

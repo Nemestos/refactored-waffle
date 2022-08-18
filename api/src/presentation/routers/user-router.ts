@@ -61,8 +61,9 @@ export default function UsersRouter(
       const id = req.params.id
       try {
         await updateUserUseCase.execute(id, req.body as UserUpdateDto)
+        const updatedUser = await getUserByIdUseCase.execute(id)
         res.statusCode = StatusCodes.OK
-        res.json({ message: "L'utilisateur a bien été mis à jour" })
+        res.json(updatedUser)
       } catch (err) {
         next(err)
       }
