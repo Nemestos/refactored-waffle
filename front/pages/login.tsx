@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic'
 import styled from 'styled-components'
 import LoginForm from '../components/LoginForm'
 
