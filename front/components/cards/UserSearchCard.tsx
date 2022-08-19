@@ -2,11 +2,11 @@ import { Card, CardActions, CardContent, Chip, Grid, Typography } from '@mui/mat
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
-import { useDeleteUserMutation } from '../lib/api/userApi'
-import { IUser } from '../types/user.types'
-import { ConfirmationModal } from './ConfirmationModal'
-import { ScopeButton } from './ScopeButton'
-import { UpdateUserModal } from './UpdateUserModal'
+import { useDeleteUserMutation } from '../../lib/api/userApi'
+import { IUser } from '../../types/user.types'
+import { ConfirmationModal } from '../modals/ConfirmationModal'
+import { UpdateUserModal } from '../modals/UpdateUserModal'
+import { ScopeButton } from '../ScopeButton'
 
 export interface UserSearchCardProps {
   user: IUser

@@ -11,6 +11,7 @@ import { DeleteUserById } from '~/application/use-cases/user/delete-user-by-id'
 import { Groups } from '~/domain/base/groups'
 import { UserUpdateDto } from '~/domain/dtos/user-dto'
 import Event from '~/domain/entities/event'
+import Moto from '~/domain/entities/moto'
 import User from '~/domain/entities/user'
 import { Scopes } from '~/domain/enums/scope-enum'
 import { Jwt } from '~/domain/interfaces/jwt'
@@ -31,6 +32,7 @@ export default function UsersRouter(
   const router = express.Router()
   const getUsersMiddleware = authMiddleware(jwtService, [Scopes.CanGetUsers])
   const getUsersEventsMiddleware = authMiddleware(jwtService, [Scopes.CanGetEvents])
+  const getUsersMotosMiddleware = authMiddleware(jwtService, [Scopes.CanGetMotos])
   const updateUserMiddleware = authMiddleware(jwtService, [Scopes.CanUpdateUsers], true)
   const deleteUsersMiddleware = authMiddleware(jwtService, [Scopes.CanDeleteUsers], true)
   router.get('/', getUsersMiddleware, async (req: Request, res: Response, next: NextFunction) => {
@@ -72,6 +74,17 @@ export default function UsersRouter(
       }
     }
   )
+  router.get('/:userId/motos', getUsersMotosMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+    const { userId } = req.params
+    try {
+      const user = await getUserByIdUseCase.execute(userId)
+      const transformedMotos = transform(Moto, user?.motos, [Groups.READ]) as ResponseStructureArray<Moto>
+
+      return res.json(transformedMotos)
+    } catch (error) {
+      next(error)
+    }
+  })
 
   router.get('/:userId/events/', getUsersEventsMiddleware, async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.params

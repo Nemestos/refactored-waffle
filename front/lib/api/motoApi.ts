@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { IBasicSuccessResponse, IObjectResponse } from '../../types/global.types'
 import { IMoto, IUpdateMotoRequest } from '../../types/motos.types'
+import { IUser } from '../../types/user.types'
 import customFetchBase from './customFetchBase'
 
 export const motoApi = createApi({
@@ -55,6 +56,28 @@ export const motoApi = createApi({
             ]
           : [{ type: 'Motos', id: 'LIST' }]
     }),
+
+    getAllUserMotos: builder.query<IMoto[], string>({
+      query(id) {
+        console.log(id)
+        return {
+          url: `/users/${id}/motos`,
+          credentials: 'include'
+        }
+      },
+      transformResponse: (results: IObjectResponse<IMoto[]>) => results.data,
+      // handle query invalidation
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ _id }) => ({
+                type: 'Motos' as const,
+                id: _id
+              })),
+              { type: 'Motos', id: 'LIST' }
+            ]
+          : [{ type: 'Motos', id: 'LIST' }]
+    }),
     deleteMoto: builder.mutation<IBasicSuccessResponse, string>({
       query(id) {
         return {
@@ -64,8 +87,28 @@ export const motoApi = createApi({
         }
       },
       invalidatesTags: [{ type: 'Motos', id: 'LIST' }]
+    }),
+    deleteMotoOfUser: builder.mutation<IUser, { userId: string; motoId: string }>({
+      query({ userId, motoId }) {
+        return {
+          url: `/users/${userId}/motos/${motoId}`,
+          method: 'DELETE',
+          credentials: 'include'
+        }
+      },
+      invalidatesTags: (result, error, { userId }) => [
+        { type: 'Motos', id: 'LIST' },
+        { type: 'Motos', id: userId }
+      ]
     })
   })
 })
 
-export const { useDeleteMotoMutation, useUpdateMotoMutation, useGetAllMotosQuery, useGetMotoQuery } = motoApi
+export const {
+  useDeleteMotoMutation,
+  useDeleteMotoOfUserMutation,
+  useUpdateMotoMutation,
+  useGetAllMotosQuery,
+  useGetAllUserMotosQuery,
+  useGetMotoQuery
+} = motoApi

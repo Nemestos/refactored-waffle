@@ -2,10 +2,10 @@ import { Card, CardActions, CardContent, Grid, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
-import { useDeleteMotoMutation } from '../lib/api/motoApi'
-import { useDeleteMotoOfUserMutation } from '../lib/api/userApi'
-import { IMoto } from '../types/motos.types'
-import { ConfirmationModal } from './ConfirmationModal'
+import { useDeleteMotoMutation, useDeleteMotoOfUserMutation } from '../../lib/api/motoApi'
+import { IMoto } from '../../types/motos.types'
+import { ConfirmationModal } from '../modals/ConfirmationModal'
+import { UpdateMotoModal } from '../modals/UpdateMotoModal'
 
 export interface UserSearchCardProps {
   moto: IMoto
@@ -56,6 +56,7 @@ function MotoSearchCard({ moto, userId }: UserSearchCardProps) {
             requiredScope="can_delete_motos"
             onTrigger={handleMotoDelete}
           />
+          <UpdateMotoModal moto={moto} />
           {/* <UpdateUserModal user={user} /> */}
 
           {/* <ScopeButton content="View" requiredScope="can_read_users" onClick={handleViewUser} /> */}

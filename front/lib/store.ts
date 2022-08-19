@@ -30,7 +30,8 @@ const rootReducer = (state: ReturnType<typeof combinedReducers>, action: AnyActi
 export const store = configureStore({
   reducer: rootReducer,
   devTools: true,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({}).concat([authApi.middleware, userApi.middleware])
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({}).concat([authApi.middleware, userApi.middleware, motoApi.middleware])
 })
 
 const makeStore: MakeStore = () => store

@@ -10,9 +10,9 @@ import { useDeleteUserMutation, useGetUserQuery } from '../lib/api/userApi'
 import { RootState, useAppSelector } from '../lib/store'
 import { IUser } from '../types/user.types'
 import { AuthGuard } from './AuthGuard'
-import { ConfirmationModal } from './ConfirmationModal'
+import { ConfirmationModal } from './modals/ConfirmationModal'
+import { UpdateUserModal } from './modals/UpdateUserModal'
 import { ScopeButton } from './ScopeButton'
-import { UpdateUserModal } from './UpdateUserModal'
 
 const Container = styled.div`
   background-color: #ffffff42;

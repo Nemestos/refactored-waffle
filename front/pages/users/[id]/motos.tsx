@@ -4,22 +4,23 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { AuthGuard } from '../../../components/AuthGuard'
-import MotoSearchCard from '../../../components/MotoSearchCard'
+import MotoSearchCard from '../../../components/cards/MotoSearchCard'
 import { SearchInput } from '../../../components/SearchInput'
 import Wrapper from '../../../components/Wrapper'
-import { useGetUserQuery } from '../../../lib/api/userApi'
+import { useGetAllUserMotosQuery } from '../../../lib/api/motoApi'
 
 export const AllUsersMotos = () => {
   const router = useRouter()
 
   const { id } = router.query
 
-  const getUserStates = useGetUserQuery(id as string)
+  const getUserMotosState = useGetAllUserMotosQuery(id as string)
+
   useEffect(() => {
-    if (getUserStates.isError) {
+    if (getUserMotosState.isError) {
       toast.error(`Cant get motos of user ${id}`)
     }
-  }, [getUserStates.isLoading])
+  }, [getUserMotosState.isLoading])
   const [filterMoto, setFilterMoto] = useState('')
 
   const onSearchChange = (event) => {
@@ -28,11 +29,11 @@ export const AllUsersMotos = () => {
   }
   const filteredMoto = () => {
     if (filterMoto === '') {
-      return getUserStates.data.motos
+      return getUserMotosState.data
     }
-    return getUserStates.data.motos.filter((moto) => moto.model.toLowerCase().startsWith(filterMoto.toLowerCase()))
+    return getUserMotosState.data.filter((moto) => moto.model.toLowerCase().startsWith(filterMoto.toLowerCase()))
   }
-  if (getUserStates.isLoading) {
+  if (getUserMotosState.isLoading) {
     return (
       <>
         <Wrapper>
