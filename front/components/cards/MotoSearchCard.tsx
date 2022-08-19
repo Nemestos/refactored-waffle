@@ -1,4 +1,4 @@
-import { Card, CardActions, CardContent, Grid, Typography } from '@mui/material'
+import { Card, CardActions, CardContent, Grid, Typography, Chip } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
@@ -44,9 +44,7 @@ function MotoSearchCard({ moto, userId }: UserSearchCardProps) {
           <Typography variant="h5" component="div">
             {moto.model} / {moto.manufacturer}
           </Typography>
-          <Typography variant="h6" component="div">
-            ({moto.category})
-          </Typography>
+          <Chip label={moto.category} />
         </CardContent>
         <CardActions>
           <ConfirmationModal

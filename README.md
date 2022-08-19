@@ -33,3 +33,21 @@ docker-compose build
 - presentation : couche express regroupant les routes de l'api et les middlewares faisant reference à toute les couches
 
 [<img src="https://cdn-media-1.freecodecamp.org/images/YsN6twE3-4Q4OYpgxoModmx29I8zthQ3f0OR">](https://cdn-media-1.freecodecamp.org/images/YsN6twE3-4Q4OYpgxoModmx29I8zthQ3f0OR)
+
+## Structure FRONT
+
+- Utilisation de Redux toolkit :
+- Slices : ensemble de reducers et d'actions (ici utilisé pour store le state lié à l'utilisateur)
+- Api : wrapper pour gérer les appels api, leur synchronisation, leur load/error/success et le refetching en vas d'invalidation
+
+## Features FRONT
+
+- Redux toolkit
+- Register/signin/logout avec gestion access token et refresh token
+- On peut recuperer tout les utilisateurs, voir leur scopes et rechercher par le nom
+- Un utilisateur peut accéder à son profil et update ses infos
+- Accès à une page profile avec les stats de l'utilisateur
+- CRUD pour les users
+- CRUD pour les events
+- CRUD pour les motos(coté user)
+- Filtrage des données par categories pour events et motos

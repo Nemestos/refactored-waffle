@@ -12,7 +12,7 @@ import { MotoCategory } from '../../types/motos.types'
 export const AllEvents = () => {
   const { isLoading, isError, data } = useGetAllEventsQuery()
   const [filterEvent, setFilterEvent] = useState('')
-  const [filterCategory, setFilterCategory] = useState<MotoCategory>('')
+  const [filterCategory, setFilterCategory] = useState('')
 
   useEffect(() => {
     if (isError) {
