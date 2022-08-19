@@ -92,7 +92,7 @@ export const UpdateEventModal = ({ event }: UpdateEventModalProps) => {
           </BaseForm>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="info">
+          <Button onClick={handleClose} color="error">
             Annuler
           </Button>
         </DialogActions>

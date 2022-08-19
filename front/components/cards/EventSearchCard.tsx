@@ -54,7 +54,7 @@ function EventSearchCard({ event }: EventSearchCardProps) {
               onTrigger={handleEventDelete}
             />
             <UpdateEventModal event={event} />
-            <Button variant="contained" onClick={handleViewOwner} size="small">
+            <Button variant="contained" onClick={handleViewOwner} size="small" color="error">
               View Owner
             </Button>
           </ButtonGroup>

@@ -53,7 +53,7 @@ export const UpdateUserModal = ({ user }: UpdateUserModalProps) => {
   return (
     <div>
       {me._id === user._id ? (
-        <Button onClick={handleOpen} size="small" variant="contained">
+        <Button onClick={handleOpen} size="small" variant="contained" color="error">
           Update
         </Button>
       ) : (

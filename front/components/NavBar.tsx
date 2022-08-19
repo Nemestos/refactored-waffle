@@ -51,11 +51,6 @@ function NavBar() {
             <a>Biker</a>
           </Link>
         </li>
-        <li>
-          <Link href="/">
-            <a>Contact</a>
-          </Link>
-        </li>
       </NavUl>
     </NavContainer>
   )

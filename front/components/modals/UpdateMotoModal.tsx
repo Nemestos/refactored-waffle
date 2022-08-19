@@ -73,7 +73,7 @@ export const UpdateMotoModal = ({ moto }: UpdateMotoModalProps) => {
           </BaseForm>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="info">
+          <Button onClick={handleClose} color="error">
             Annuler
           </Button>
         </DialogActions>

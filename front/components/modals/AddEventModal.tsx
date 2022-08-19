@@ -20,7 +20,6 @@ const updateSchema = object({
 
 export const AddEventModal = () => {
   const [createEvent, { isLoading, isError, isSuccess }] = useCreateEventMutation()
-  const defaultValues: ICreateEventRequest = {}
 
   const selectCategories = Object.keys(MotoCategory).map((category) => ({ id: category, label: category }))
 
@@ -57,7 +56,7 @@ export const AddEventModal = () => {
           <DialogContentText>Veuillez remplir les champs</DialogContentText>
           <BaseForm
             resolver={yupResolver(updateSchema)}
-            defaultValue={defaultValues}
+            defaultValue={null}
             onSubmit={onSubmit}
             topText="Create event"
             buttonText="Submit"
