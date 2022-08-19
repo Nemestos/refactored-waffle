@@ -26,7 +26,7 @@ BaseFormProps<T>) => (
       <Typography textAlign={'center'} variant="h5">
         {topText}
       </Typography>
-      <Stack direction={'column'}>
+      <Stack direction={'column'} gap={4}>
         {children}
         <Button type="submit" variant="contained" color="primary">
           {buttonText}

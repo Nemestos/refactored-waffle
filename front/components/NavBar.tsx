@@ -36,7 +36,7 @@ function NavBar() {
           </Link>
         </li>
         <li>
-          <Link href="/">
+          <Link href="/events">
             <a>Events</a>
           </Link>
         </li>

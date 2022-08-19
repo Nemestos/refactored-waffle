@@ -47,7 +47,7 @@ function UserSearchCard({ user }: UserSearchCardProps) {
             ))}
           </Grid>
         </CardContent>
-        <CardActions>
+        <CardActions sx={{ display: 'flex', gap: 1 }}>
           <ConfirmationModal
             actionType="Delete"
             entityType="User"

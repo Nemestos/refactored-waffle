@@ -31,7 +31,6 @@ export const UpdateMotoModal = ({ moto }: UpdateMotoModalProps) => {
     category: moto.category
   }
   const selectCategories = Object.keys(MotoCategory).map((category) => ({ id: category, label: category }))
-  console.log(defaultValues)
 
   useEffect(() => {
     if (isSuccess) {
