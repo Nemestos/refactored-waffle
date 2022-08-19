@@ -1,4 +1,4 @@
-import { Card, CardActions, CardContent, Chip, Grid, Typography } from '@mui/material'
+import { Button, ButtonGroup, Card, CardActions, CardContent, Chip, Grid, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
@@ -25,8 +25,8 @@ function EventSearchCard({ event }: EventSearchCardProps) {
   const handleEventDelete = () => {
     deleteEvent(event._id)
   }
-  const handleViewUser = () => {
-    router.push(`/events/${event._id}`)
+  const handleViewOwner = () => {
+    router.push(`/users/${event.owner._id}`)
   }
   return (
     <Grid item xs={2}>
@@ -45,15 +45,19 @@ function EventSearchCard({ event }: EventSearchCardProps) {
           <Chip label={event.category} />
         </CardContent>
         <CardActions sx={{ display: 'flex', gap: 1 }}>
-          <ConfirmationModal
-            actionType="Delete"
-            entityType="Event"
-            entity={event}
-            requiredScope="can_delete_events"
-            onTrigger={handleEventDelete}
-          />
-          <UpdateEventModal event={event} />
-          
+          <ButtonGroup>
+            <ConfirmationModal
+              actionType="Delete"
+              entityType="Event"
+              entity={event}
+              requiredScope="can_delete_events"
+              onTrigger={handleEventDelete}
+            />
+            <UpdateEventModal event={event} />
+            <Button variant="contained" onClick={handleViewOwner} size="small">
+              View Owner
+            </Button>
+          </ButtonGroup>
         </CardActions>
       </Card>
     </Grid>

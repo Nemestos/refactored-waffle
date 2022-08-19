@@ -1,4 +1,4 @@
-import { Card, CardActions, CardContent, Chip, Grid, Typography } from '@mui/material'
+import { ButtonGroup, Card, CardActions, CardContent, Chip, Grid, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
@@ -48,16 +48,18 @@ function UserSearchCard({ user }: UserSearchCardProps) {
           </Grid>
         </CardContent>
         <CardActions sx={{ display: 'flex', gap: 1 }}>
-          <ConfirmationModal
-            actionType="Delete"
-            entityType="User"
-            entity={user}
-            requiredScope="can_delete_users"
-            onTrigger={handleUserDelete}
-          />
-          <UpdateUserModal user={user} />
+          <ButtonGroup>
+            <ConfirmationModal
+              actionType="Delete"
+              entityType="User"
+              entity={user}
+              requiredScope="can_delete_users"
+              onTrigger={handleUserDelete}
+            />
+            <UpdateUserModal user={user} />
 
-          <ScopeButton content="View" requiredScope="can_read_users" onClick={handleViewUser} />
+            <ScopeButton content="View" requiredScope="can_read_users" onClick={handleViewUser} />
+          </ButtonGroup>
         </CardActions>
       </Card>
     </Grid>
