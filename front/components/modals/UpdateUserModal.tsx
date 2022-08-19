@@ -1,16 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { TextFieldElement } from 'react-hook-form-mui'
 import { toast } from 'react-toastify'
 import { object, string } from 'yup'
-import { useUpdateUserMutation } from '../lib/api/userApi'
-import { RootState, useAppSelector } from '../lib/store'
-import { IUpdateUserRequest, IUser } from '../types/user.types'
-import BaseForm from './BaseForm'
-import BaseInput from './BaseInput'
-import { ScopeButton } from './ScopeButton'
+import { useUpdateUserMutation } from '../../lib/api/userApi'
+import { RootState, useAppSelector } from '../../lib/store'
+import { IUpdateUserRequest, IUser } from '../../types/user.types'
+import BaseForm from '../BaseForm'
+import { ScopeButton } from '../ScopeButton'
 
 const updateSchema = object({
   email: string().email(),
@@ -23,23 +21,14 @@ export interface UpdateUserModalProps {
 }
 
 export const UpdateUserModal = ({ user }: UpdateUserModalProps) => {
-  const router = useRouter()
   const me: IUser = useAppSelector((state: RootState) => state.userState.user)
 
   const [updateUser, { isLoading, isError, isSuccess }] = useUpdateUserMutation()
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<IUpdateUserRequest>({
-    defaultValues: {
-      email: user.email,
-      firstname: user.firstname,
-      surname: user.surname
-    },
-    resolver: yupResolver(updateSchema)
-  })
+  const defaultValues: IUpdateUserRequest = {
+    email: user.email,
+    firstname: user.firstname,
+    surname: user.surname
+  }
 
   useEffect(() => {
     if (isSuccess) {
@@ -64,7 +53,7 @@ export const UpdateUserModal = ({ user }: UpdateUserModalProps) => {
   return (
     <div>
       {me._id === user._id ? (
-        <Button onClick={handleOpen} size="small" variant="contained">
+        <Button onClick={handleOpen} size="small" variant="contained" color="error">
           Update
         </Button>
       ) : (
@@ -74,10 +63,16 @@ export const UpdateUserModal = ({ user }: UpdateUserModalProps) => {
         <DialogTitle>Update user #{user._id}</DialogTitle>
         <DialogContent>
           <DialogContentText>Veuillez mettre à jour les champs voulus</DialogContentText>
-          <BaseForm onSubmit={handleSubmit(onSubmit)} topText="Update user" buttonText="Submit">
-            <BaseInput name="email" register={register} errors={errors} label="Email" />
-            <BaseInput name="firstname" register={register} errors={errors} label="Firstname" />
-            <BaseInput name="surname" register={register} errors={errors} label="Surname" />
+          <BaseForm
+            resolver={yupResolver(updateSchema)}
+            defaultValue={defaultValues}
+            onSubmit={onSubmit}
+            topText="Update user"
+            buttonText="Submit"
+          >
+            <TextFieldElement name="email" label="Email" />
+            <TextFieldElement name="firstname" label="Firstname" />
+            <TextFieldElement name="surname" label="Surname" />
           </BaseForm>
         </DialogContent>
         <DialogActions>

@@ -14,6 +14,10 @@ export class UserRepositoryImpl implements UserRepository {
     await this.userDataSource.addMoto(userId, motoId)
   }
 
+  async deleteMotoToUser(userId: string, motoId: string): Promise<void> {
+    await this.userDataSource.deleteMoto(userId, motoId)
+  }
+
   async userExist(id: string): Promise<boolean> {
     return await this.userDataSource.userExist(id)
   }

@@ -36,7 +36,7 @@ function NavBar() {
           </Link>
         </li>
         <li>
-          <Link href="/">
+          <Link href="/events">
             <a>Events</a>
           </Link>
         </li>
@@ -49,11 +49,6 @@ function NavBar() {
         <li>
           <Link href={{ pathname: `/users/${me._id}` }}>
             <a>Biker</a>
-          </Link>
-        </li>
-        <li>
-          <Link href="/">
-            <a>Contact</a>
           </Link>
         </li>
       </NavUl>

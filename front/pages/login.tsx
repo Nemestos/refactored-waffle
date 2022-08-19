@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import LoginForm from '../components/LoginForm'
+import LoginForm from '../components/forms/LoginForm'
 import Wrapper from '../components/Wrapper'
 
 // const Wrapper = dynamic(() => import("../components/wrapper"), {

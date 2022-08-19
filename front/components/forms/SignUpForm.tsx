@@ -1,15 +1,14 @@
 import { useRouter } from 'next/router'
 import { object, string } from 'yup'
-import BaseForm from './BaseForm'
-import BaseInput from './BaseInput'
 
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm } from 'react-hook-form'
 
 import { useEffect } from 'react'
+import { TextFieldElement } from 'react-hook-form-mui'
 import { toast } from 'react-toastify'
-import { useSignupUserMutation } from '../lib/api/authApi'
-import { IRegisterUserRequest } from '../types/auth.types'
+import { useSignupUserMutation } from '../../lib/api/authApi'
+import { IRegisterUserRequest } from '../../types/auth.types'
+import BaseForm from '../BaseForm'
 
 const registerSchema = object({
   email: string().email().required(),
@@ -22,14 +21,6 @@ const SignupForm = () => {
   const router = useRouter()
 
   const [signupUser, { isLoading, isError, isSuccess }] = useSignupUserMutation()
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({
-    resolver: yupResolver(registerSchema)
-  })
 
   useEffect(() => {
     if (isSuccess) {
@@ -45,16 +36,17 @@ const SignupForm = () => {
 
   return (
     <BaseForm
-      onSubmit={handleSubmit(onSubmit)}
-      topText="Hello Biker"
+      defaultValue={null}
+      resolver={yupResolver(registerSchema)}
+      onSubmit={onSubmit}
+      topText="Hello New Biker"
       buttonText="Submit"
-      serverError={errors.apiError ? (errors.apiError.message as string) : null}
     >
-      <BaseInput name="email" register={register} errors={errors} label="Email" />
+      <TextFieldElement name="email" label="Email" />
+      <TextFieldElement name="password" label="Password" type={'password'} />
 
-      <BaseInput name="password" register={register} errors={errors} label="Password" type="password" />
-      <BaseInput name="firstname" register={register} errors={errors} label="Firstname" />
-      <BaseInput name="surname" register={register} errors={errors} label="Surname" />
+      <TextFieldElement name="firstname" label="Firstname" />
+      <TextFieldElement name="surname" label="Surname" />
     </BaseForm>
   )
 }

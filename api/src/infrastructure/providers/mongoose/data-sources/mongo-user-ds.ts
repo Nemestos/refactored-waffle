@@ -15,6 +15,10 @@ export class MongoUserDataSource implements UserDataSource {
     user.save()
   }
 
+  async deleteMoto(userId: string, motoId: string): Promise<void> {
+    await UserModel.updateOne({ _id: userId }, { $pullAll: { motos: [motoId] } }).exec()
+  }
+
   async userExist(id: string): Promise<boolean> {
     if (!isValidObjectId(id)) {
       return Promise.resolve(false)

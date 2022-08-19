@@ -59,8 +59,10 @@ export default function MotosRouter(
         await updateMotoUseCase.execute(id, {
           ...req.body
         } as MotoUpdateDto)
+        const updatedMoto = await getMotoByIdUseCase.execute(id)
+        const transformedMoto = transform(Moto, updatedMoto, [Groups.READ]) as ResponseStructureSingle<Moto>
         res.statusCode = StatusCodes.OK
-        res.json({ message: 'La Moto a bien été mise à jour' })
+        res.json(transformedMoto)
       } catch (err) {
         next(err)
       }

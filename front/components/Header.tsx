@@ -1,3 +1,4 @@
+import { Box, Button, ButtonGroup, Divider, Typography } from '@mui/material'
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { MdAppRegistration, MdLogin, MdLogout } from 'react-icons/md'
@@ -26,7 +27,7 @@ const HeaderStyled = styled.header`
 
 const HorizonLine = styled.hr`
   width: 90%;
-  height: 2px;
+  height: 5px;
   background-color: white;
   border: none;
   padding-top: -10px;
@@ -57,32 +58,42 @@ export const Header = () => {
     logoutUser()
   }
   return (
-    <>
-      <HeaderStyled>
+    <Box zIndex={1} display="flex" flexDirection={'column'} gap={2} marginX={4} marginY={3}>
+      <Box display={'flex'} justifyContent="space-between">
         <div></div>
-        <h3>W M C</h3>
+        <Typography variant="h3" color={'white'}>
+          W M C
+        </Typography>
         {user != null ? (
-          <div>
-            <p>{user.firstname}</p>
-            <MdLogout onClick={handleLogout} />
-          </div>
+          <ButtonGroup orientation="vertical">
+            <Typography variant="body1" color={'white'}>
+              {user.firstname}
+            </Typography>
+            <Button>
+              <MdLogout onClick={handleLogout} color={'white'} fontSize={'large'} />
+            </Button>
+          </ButtonGroup>
         ) : (
-          <div>
+          <ButtonGroup orientation="vertical">
             <Link href="/login">
-              <a>
-                <MdLogin>login</MdLogin>
-              </a>
+              <Button>
+                <MdLogin color="white" fontSize={'large'}>
+                  login
+                </MdLogin>
+              </Button>
             </Link>
             <Link href="/signup">
-              <a>
-                <MdAppRegistration>login</MdAppRegistration>
-              </a>
+              <Button>
+                <MdAppRegistration color="white" fontSize={'large'}>
+                  login
+                </MdAppRegistration>
+              </Button>
             </Link>
-          </div>
+          </ButtonGroup>
         )}
-      </HeaderStyled>
-      <HorizonLine />
+      </Box>
+      <Divider color="white" style={{ width: '100%' }} />
       {user != null && <NavBar />}
-    </>
+    </Box>
   )
 }

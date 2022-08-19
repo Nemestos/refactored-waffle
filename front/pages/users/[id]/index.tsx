@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
-import BikerInfo from '../../components/BikerInfo'
-import Wrapper from '../../components/Wrapper'
+import BikerInfo from '../../../components/BikerInfo'
+import Wrapper from '../../../components/Wrapper'
 
 const BikerInfoWrapper = styled.div`
   display: flex;

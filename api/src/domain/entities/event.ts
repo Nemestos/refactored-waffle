@@ -43,12 +43,12 @@ export default class Event extends ApiObject<string> {
   @IsDateString({}, { groups: Groups.basicAll() })
   @IsOptional({ groups: [Groups.UPDATE] })
   @IsNotEmpty({ groups: [Groups.CREATE] })
-  startDate: Date
+  startDate: string
 
   @prop({ required: true })
   @Expose({ groups: Groups.basicAll() })
   @IsDateString({}, { groups: Groups.basicAll() })
   @IsOptional({ groups: [Groups.UPDATE] })
   @IsNotEmpty({ groups: [Groups.CREATE] })
-  endDate: Date
+  endDate: string
 }

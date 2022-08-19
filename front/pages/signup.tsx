@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 import styled from 'styled-components'
-import SignupForm from '../components/SignUpForm'
+import SignupForm from '../components/forms/SignUpForm'
 const Template = dynamic(() => import('../components/Wrapper'), {
   ssr: false
 })

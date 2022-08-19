@@ -1,12 +1,12 @@
-import { Card, CardActions, CardContent, Chip, Grid, Typography } from '@mui/material'
+import { ButtonGroup, Card, CardActions, CardContent, Chip, Grid, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
-import { useDeleteUserMutation } from '../lib/api/userApi'
-import { IUser } from '../types/user.types'
-import { ConfirmationModal } from './ConfirmationModal'
-import { ScopeButton } from './ScopeButton'
-import { UpdateUserModal } from './UpdateUserModal'
+import { useDeleteUserMutation } from '../../lib/api/userApi'
+import { IUser } from '../../types/user.types'
+import { ConfirmationModal } from '../modals/ConfirmationModal'
+import { UpdateUserModal } from '../modals/UpdateUserModal'
+import { ScopeButton } from '../ScopeButton'
 
 export interface UserSearchCardProps {
   user: IUser
@@ -47,17 +47,19 @@ function UserSearchCard({ user }: UserSearchCardProps) {
             ))}
           </Grid>
         </CardContent>
-        <CardActions>
-          <ConfirmationModal
-            actionType="Delete"
-            entityType="User"
-            entity={user}
-            requiredScope="can_delete_users"
-            onTrigger={handleUserDelete}
-          />
-          <UpdateUserModal user={user} />
+        <CardActions sx={{ display: 'flex', gap: 1 }}>
+          <ButtonGroup>
+            <ConfirmationModal
+              actionType="Delete"
+              entityType="User"
+              entity={user}
+              requiredScope="can_delete_users"
+              onTrigger={handleUserDelete}
+            />
+            <UpdateUserModal user={user} />
 
-          <ScopeButton content="View" requiredScope="can_read_users" onClick={handleViewUser} />
+            <ScopeButton content="View" requiredScope="can_read_users" onClick={handleViewUser} />
+          </ButtonGroup>
         </CardActions>
       </Card>
     </Grid>

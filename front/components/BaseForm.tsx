@@ -1,27 +1,39 @@
-import { Button, FormControl, Typography } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import React from 'react'
-
-export interface BaseFormProps {
-  children: React.ReactNode
-  onSubmit: () => void
+import { FieldValues, Resolver } from 'react-hook-form'
+import { FormContainer } from 'react-hook-form-mui'
+export interface BaseFormProps<T> {
+  resolver: Resolver<FieldValues, any>
+  defaultValue: T
+  onSubmit: (v: T) => void
   topText: string
   buttonText: string
-  serverError?: string
+  // serverError?: string
+  children: React.ReactNode
 }
 
-const BaseForm: React.FC<BaseFormProps> = ({ children, onSubmit, topText, buttonText, serverError }) => (
-  <form onSubmit={onSubmit} className="bg-slate-500 p-4">
-    <FormControl>
+const BaseForm = <T extends unknown>({
+  children,
+  resolver,
+  onSubmit,
+  defaultValue,
+  topText,
+  buttonText
+}: // serverError
+BaseFormProps<T>) => (
+  <Box className="bg-slate-400 p-10 rounded-lg">
+    <FormContainer resolver={resolver} onSuccess={onSubmit} defaultValues={defaultValue}>
       <Typography textAlign={'center'} variant="h5">
         {topText}
       </Typography>
-      {children}
-      <Button variant="contained" color="primary" type="submit">
-        {buttonText}
-      </Button>
-      {serverError && <div className="text-red-600 ml-1 h-4">{serverError}</div>}
-    </FormControl>
-  </form>
+      <Stack direction={'column'} gap={4}>
+        {children}
+        <Button type="submit" variant="contained" color="primary">
+          {buttonText}
+        </Button>
+      </Stack>
+    </FormContainer>
+  </Box>
 )
 
 export default BaseForm

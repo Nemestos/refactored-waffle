@@ -1,7 +1,7 @@
 import { Button, capitalize, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 import { useState } from 'react'
-import { IEntity } from '../types/global.types'
-import { ScopeButton } from './ScopeButton'
+import { IEntity } from '../../types/global.types'
+import { ScopeButton } from '../ScopeButton'
 export interface ConfirmationModalProps<T> {
   entity: T
   entityType: string

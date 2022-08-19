@@ -1,16 +1,16 @@
+import { Box } from '@mui/material'
 import NextImage from 'next/image'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Header } from './Header'
-
-const Box = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: static;
-  height: 100%;
-  width: 100%;
-  min-height: 100%;
-`
+// const Box = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   position: static;
+//   height: 100%;
+//   width: 100%;
+//   min-height: 100%;
+// `
 const Main = styled.main`
   z-index: 1;
   width: 100%;
@@ -51,18 +51,11 @@ const Wrapper: React.FunctionComponent<any> = (props) => {
 
   if (width && height) {
     return (
-      <Box id="wrapper">
+      <Box display={'flex'} flexDirection={'column'} marginX={5}>
         <Header />
         <NextImage src="/BackGround/background.jpg" layout="fill" className="object-cover w-full h-full" />
-        {/* <Image
-          className="background"
-          id="background-image"
-          src=""
-          width={width}
-          height={height}
-          layout="fill"
-          style={{ zIndex: -1 }}
-        /> */}
+        <h3>test</h3>
+
         <Main>{props.children}</Main>
       </Box>
     )

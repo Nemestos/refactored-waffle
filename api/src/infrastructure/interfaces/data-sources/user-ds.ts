@@ -7,6 +7,7 @@ import User from '~/domain/entities/user'
 export interface UserDataSource {
   create(user: UserCreationDto): Promise<User>
   addMoto(userId: string, motoId: string): Promise<void>
+  deleteMoto(userId: string, motoId: string): Promise<void>
   update(id: string, user: UserUpdateDto): Promise<boolean>
   getAll(): Promise<User[]>
   getById(id: string): Promise<User | null>
